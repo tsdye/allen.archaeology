@@ -1,13 +1,24 @@
 Package: allen.archaeology
-Title: What the Package Does (One Line, Title Case)
+Title: Allen\'s Interval Algebra for Archaeologists
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
+Authors@R:
+    person(given = "Thomas",
+           family = "Dye",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "tsd@tsdye.online",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+Description: Use Allen\'s interval algebra to describe and analyze indefinite intervals estimated by Bayesian calibration of archaeological materials.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown
+Imports:
+    ArchaeoPhases,
+    ggraph,
+    ggplot2,
+    khroma
+RoxygenNote: 7.0.2
+VignetteBuilder: knitr
