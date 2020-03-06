@@ -9,6 +9,9 @@ allen.relations.concur(allen.set)
 \arguments{
 \item{allen.set}{Allen set}
 }
+\value{
+A string that describes the concurrence relation
+}
 \description{
 Return a string that describes the concurrence set of an Allen relation set,
 or indicates there is no concurrence set.  Useful for output

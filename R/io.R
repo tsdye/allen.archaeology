@@ -98,6 +98,8 @@ allen.relations.set <- function(allen.set)
 #'
 #' @param allen.set Allen set
 #'
+#' @return A string that describes the concurrence relation
+#'
 #' @author Thomas S. Dye
 #'
 allen.relations.concur <- function(allen.set)

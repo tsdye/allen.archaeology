@@ -65,20 +65,24 @@
 #' Calculate the proportion of each relation in a result vector
 #'
 #' Divides through by the sum of observations in the result vector.
-#' Assigns the names of the result vector to the return vector.
+#' Assigns the names of the result vector to the optionally sorted
+#' return vector.
 #'
-#' @param result.vector A result vector
+#' @param result_vector A result vector
+#' @param sort if TRUE sort in decreasing order else return unsorted vector
 #'
 #' @return A named vector with proportions
 #'
 #' @author Thomas S. Dye
 #'
-  allen.proportion.results <- function(result.vector)
-  {
-    res <- result.vector / sum(result.vector)
-    names(res) <- names(result.vector)
+allen_proportion_results <- function(result_vector, sort = TRUE)
+{
+    res <- result_vector / sum(result_vector)
+    names(res) <- names(result_vector)
+    if(sort)
+        res <- sort(res, decreasing = TRUE)
     res
-  }
+}
 
 #' Compare indefinite intervals
 #'
