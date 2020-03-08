@@ -9,6 +9,7 @@ allen_plot_multiple(
   file_name = NULL,
   pad = 0.2,
   font_size = 11,
+  columns = 3,
   height = 7,
   width = 7
 )
@@ -19,9 +20,11 @@ produced by xxx}
 
 \item{file_name}{optional path to the graphic file output}
 
-\item{pad}{pad the left and right margins to keep labels from disappearing}
+\item{pad}{pad the margins to keep labels from disappearing}
 
 \item{font_size}{font size for the labels in the plot}
+
+\item{columns}{number of columns in the graphic}
 
 \item{height}{height in inches of the graphic file output}
 

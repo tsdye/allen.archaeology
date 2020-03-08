@@ -19,7 +19,7 @@ produced by illustrate_allen_relations()}
 
 \item{file_name}{optional path to the graphic file output}
 
-\item{pad}{padding in inches to the left and right margins to keep
+\item{pad}{padding in inches to the margins to keep
 labels from disappearing off the edge of the graphic}
 
 \item{font_size}{font size for the labels in the plot}

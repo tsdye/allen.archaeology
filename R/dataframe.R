@@ -21,31 +21,34 @@
 allen_relate_phases <- function(mcmc,
                                 phases_1,
                                 phases_2,
-                                app) {
+                                app = "chronomodel") {
     just_odd <- function(x) x[ x %% 2 == 1 ]
     relations <- NULL
-    chains <- switch(app,
-                     chronomodel = ArchaeoPhases::read_chronomodel(mcmc),
-                     oxcal = ArchaeoPhases::read_oxcal(mcmc),
-                     bcal = ArchaeoPhases::read_bcal(mcmc))
+    chains.df <- switch(app,
+                        chronomodel = ArchaeoPhases::read_chronomodel(mcmc,
+                                                                      quiet = "partial"),
+                        oxcal = ArchaeoPhases::read_oxcal(mcmc, quiet = "partial"),
+                        bcal = ArchaeoPhases::read_bcal(mcmc, quiet ="partial"),
+                        stop(sprintf("unknown app, '%s'", app)))
+    ## chains.df <- as.data.frame(chains)
     term_1 <- just_odd(phases_1)
     term_2 <- just_odd(phases_2)
     for(ind_2 in term_2) {
         positions_2 <- c(ind_2, ind_2 + 1)
         for(ind_1 in term_1) {
             positions_1 <- c(ind_1, ind_1 + 1, positions_2)
-            chains <- chains[,positions_1]
+            chains <- chains.df[,positions_1]
             names <- allen.check.names(colnames(chains))
             zero.vector <- allen.create.result.vector()
             result.vector <- allen.calculate.relations.2(zero.vector, chains)
-            result.six <- allen.coerce.six(result.vector)
-            result <- allen_proportion_results(result.six)
-            node <- c('precedes', 'overlaps', 'contains', 'during',
-                      'overlapped by', 'preceded by')
-            max_code <- names(result.six[result.six == max(result.six)])
-            relation_string <- allen_code_to_string(max_code)
-            x <- c(0, 0, 0.5, -0.5, 0, 0)
-            y <- c(2, 1.5, 1, 1, 0.5, 0)
+            ## result.six <- allen.coerce.six(result.vector)
+            result <- allen_proportion_results(result.vector, sort = FALSE)
+            node <-  allen_basic_relation_strings()
+            max_code <- names(result[result == max(result)])
+            ## relation_string <- allen_code_to_string(max_code)
+            relation_string <- node[max_code]
+            x <- allen_lattice_x()
+            y <- allen_lattice_y()
             title <- rep(sprintf("%s %s %s", names$first, relation_string,
                                  names$second), length(node))
             this.relation <- cbind.data.frame(x, y, result, node, title)
@@ -143,12 +146,35 @@ illustrate_allen_relations <- function(subset = "none") {
                            concurrent = "Allen concurrent relations",
                            six = "Allen relations with distinct endpoints",
                            stop(sprintf("unknown subset, '%s'", subset)))
-    node <- c('precedes', 'meets', 'overlaps', 'finished by', 'starts',
-              'contains', 'equals', 'during', 'started by', 'finishes',
-              'overlapped by', 'met-by', 'preceded by')
-    x <- c(0, 0, 0, -1, 1, -2, 0, 2, -1, 1, 0, 0, 0)
-    y <- c(8, 7, 6, 5, 5, 4, 4, 4, 3, 3, 2, 1, 0)
+    node <- allen_basic_relation_strings()
+    x <- allen_lattice_x()
+    y <- allen_lattice_y()
     title <- rep(title_string, length(node))
     df <- cbind.data.frame(x, y, result, node, title)
     df
+}
+
+#' Nokel lattice y coordinates
+#'
+#' A vector of arbitrary coordinates for lattice node placement
+#'
+#' @return A vector of integers
+#'
+#' @author Thomas S. Dye
+#'
+allen_lattice_y <- function() {
+    y <- c(8, 7, 6, 5, 5, 4, 4, 4, 3, 3, 2, 1, 0)
+}
+
+#' Nokel lattice x coordinates
+#'
+#' A vector of arbitrary coordinates for lattice node placement
+#'
+#' @return A vector of integers
+#'
+#' @author Thomas S. Dye
+#'
+allen_lattice_x <- function() {
+    x <- c(0, 0, 0, -1, 1, -2, 0, 2, -1, 1, 0, 0, 0)
+    x
 }

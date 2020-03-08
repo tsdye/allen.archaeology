@@ -191,7 +191,7 @@ allen.create.concurrent.vector <- function()
 #'
 allen.create.result.vector <- function(initial.value = 0)
 {
-  result.vector <- rep(initial.value, times=13)
+  result.vector <- rep(initial.value, times = 13)
   names(result.vector) <- allen.basic.relation.set()
   result.vector
 }

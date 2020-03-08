@@ -9,8 +9,33 @@
 #'
 allen.basic.relation.set <- function()
 {
- ret <- c("p", "m", "o", "F", "s", "D", "e", "d", "S", "f", "O", "M", "P")
-  ret
+    ret <- c("p", "m", "o", "F", "s", "D", "e", "d", "S", "f", "O", "M", "P")
+    ret
+}
+
+#' Allen basic relation set as strings
+#'
+#' String descriptors of the Allen basic relations.
+#'
+#' @return A vector of thirteen strings
+#'
+#' @author Thomas S. Dye
+#'
+allen_basic_relation_strings <- function() {
+    ret <- c(p = "precedes",
+             m = "meets",
+             o = "overlaps",
+             F = "finished by",
+             s = "starts",
+             D = "contains",
+             e = "equals",
+             d = "during",
+             S = "started by",
+             f = "finishes",
+             O = "overlapped by",
+             M = "met by",
+             P ="preceded by")
+    ret
 }
 
 #' Allen concurrent relation set

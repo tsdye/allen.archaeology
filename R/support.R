@@ -84,11 +84,11 @@
                 else
                   if(start.1 == start.2)
                   {
-                    if(end.1 > end.2) "s"
+                    if(end.1 > end.2) "S"
                     else
                       if(end.1 == end.2) "e"
                     else
-                      "S"
+                      "s"
                   }
                 else
                   if(start.1 > start.2)

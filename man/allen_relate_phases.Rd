@@ -4,7 +4,7 @@
 \alias{allen_relate_phases}
 \title{Relate phases}
 \usage{
-allen_relate_phases(mcmc, phases_1, phases_2, app)
+allen_relate_phases(mcmc, phases_1, phases_2, app = "chronomodel")
 }
 \arguments{
 \item{mcmc}{path to a csv file with MCMC output}

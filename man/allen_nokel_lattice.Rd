@@ -7,7 +7,7 @@
 allen_nokel_lattice(
   allen_set,
   file_name = NULL,
-  graph_title = "N\\\\u00F6kel lattice",
+  graph_title = "Nökel lattice",
   pad = 0.2,
   font_size = 11,
   height = 7,

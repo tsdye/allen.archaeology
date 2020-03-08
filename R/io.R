@@ -38,11 +38,12 @@ allen.read.mcmc.chains <- function(mcmc.file,
   if(!is.null(mcmc.file.2) && is.null(positions.2))
     stop("interval boundaries are required")
   mcmc.1 <- switch(EXPR = app,
-                   "bcal" = ArchaeoPhases::read_bcal(mcmc.file),
-                   "oxcal" = ArchaeoPhases::read_oxcal(mcmc.file),
+                   "bcal" = ArchaeoPhases::read_bcal(mcmc.file, quiet = "partial"),
+                   "oxcal" = ArchaeoPhases::read_oxcal(mcmc.file, quiet = "partial"),
                    "chronomodel" = ArchaeoPhases::read_chronomodel(mcmc.file,
                                                                    decimal,
-                                                                   separator),
+                                                                   separator,
+                                                                   quiet ="partial"),
                    stop("unknown calibration application"))
   start.1 <- unlist(mcmc.1[,positions[[1]]])
   end.1 <- unlist(mcmc.1[,positions[[2]]])
