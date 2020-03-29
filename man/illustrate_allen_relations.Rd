@@ -2,26 +2,45 @@
 % Please edit documentation in R/dataframe.R
 \name{illustrate_allen_relations}
 \alias{illustrate_allen_relations}
-\title{Data for an illustrative graphic}
+\title{Data for an illustrative graphic:}
 \usage{
-illustrate_allen_relations(subset = "none")
+illustrate_allen_relations(relations = "basic")
 }
 \arguments{
-\item{subset}{One of "none" (default),
-"concurrent" to highlight concurrent relations,
-"six" to highlight relations with distinct endpoints,
-"inherit" to highlight chronological information in an inheritance
-relationship, or
-"donate" to highlight chronological information in a donation relationship.}
+\item{relations}{One of:
+\describe{
+\item{basic}{show the 13 basic Allen relations (default);}
+\item{concurrent}{show concurrent relations;}
+\item{six}{show relations with distinct endpoints;}
+\item{inherit}{show chronological information about a transmission
+    relationship from the receiver's point of view;}
+\item{donate}{show chronological information from the giver's point of view during
+    transmission;}
+\item{stratigraphic}{show the basic stratigraphic relations established by an
+    observation of superposition;}
+\item{anagenetic}{show the basic relations of artifact
+    change without branching;}
+\item{cladogenetic}{show the basic relations of artifact change with branching;}
+\item{donors}{show the composite relations of two donors to a borrowing
+    occurrence;}
+\item{inheritors}{show the composite relations of two entities produced by
+    innovation from a single source;}
+\item{tradition}{show the composite relations of tradition during
+    cladogenesis;}
+\item{sequence}{show the composite relations of superposition
+    in a stratigraphic sequence; or}
+\item{anagenesis}{show the composite relations of transmission during
+    anagenesis.}}}
 }
 \value{
 A dataframe for input to allen_plot_single()
 }
 \description{
 Create a dataframe that can be used as input for an illustrative plot.
-Useful for describing the Allen operators.  Able to illustrate the full
+Useful for describing the Allen operators: illustrate the full
 set of Allen relations, concurrent Allen relations, and relations with
-distinct endpoints (six-value set).
+distinct endpoints (six-value set).  Also, useful for describing the
+chronological domains of stratification, anagenesis, and cladogenesis.
 }
 \author{
 Thomas S. Dye

@@ -120,29 +120,50 @@ allen_relation_summary <- function(mcmc, phases, app = "chronomodel") {
          application = app)
 }
 
-#' Data for an illustrative graphic
+#' Data for an illustrative graphic:
+#'
 #'
 #' Create a dataframe that can be used as input for an illustrative plot.
-#' Useful for describing the Allen operators.  Able to illustrate the full
+#' Useful for describing the Allen operators: illustrate the full
 #' set of Allen relations, concurrent Allen relations, and relations with
-#' distinct endpoints (six-value set).
+#' distinct endpoints (six-value set).  Also, useful for describing the
+#' chronological domains of stratification, anagenesis, and cladogenesis.
 #'
 #' @author Thomas S. Dye
 #'
-#' @param subset One of "none" (default),
-#' "concurrent" to highlight concurrent relations,
-#' "six" to highlight relations with distinct endpoints,
-#' "inherit" to highlight chronological information in an inheritance
-#' relationship, or
-#' "donate" to highlight chronological information in a donation relationship.
+#' @param relations One of:
+#' \describe{
+#' \item{basic}{show the 13 basic Allen relations (default);}
+#' \item{concurrent}{show concurrent relations;}
+#' \item{six}{show relations with distinct endpoints;}
+#' \item{inherit}{show chronological information about a transmission
+#'     relationship from the receiver's point of view;}
+#' \item{donate}{show chronological information from the giver's point of view during
+#'     transmission;}
+#' \item{stratigraphic}{show the basic stratigraphic relations established by an
+#'     observation of superposition;}
+#' \item{anagenetic}{show the basic relations of artifact
+#'     change without branching;}
+#' \item{cladogenetic}{show the basic relations of artifact change with branching;}
+#' \item{donors}{show the composite relations of two donors to a borrowing
+#'     occurrence;}
+#' \item{inheritors}{show the composite relations of two entities produced by
+#'     innovation from a single source;}
+#' \item{tradition}{show the composite relations of tradition during
+#'     cladogenesis;}
+#' \item{sequence}{show the composite relations of superposition
+#'     in a stratigraphic sequence; or}
+#' \item{anagenesis}{show the composite relations of transmission during
+#'     anagenesis.}}
 #'
 #' @return A dataframe for input to allen_plot_single()
 #'
 #' @export
 #'
-illustrate_allen_relations <- function(subset = "none") {
-    result <-   switch(subset,
-                       none = allen.create.result.vector(initial.value = 1),
+
+illustrate_allen_relations <- function(relations = "basic") {
+    result <-   switch(relations,
+                       basic = allen.create.result.vector(initial.value = 1),
                        concurrent = allen.create.concurrent.vector(),
                        six = allen.create.distinct.endpoint.vector(),
                        inherit = allen.string.to.vector("MOfd"),
@@ -165,9 +186,9 @@ illustrate_allen_relations <- function(subset = "none") {
                        anagenesis = allen.set.to.vector(
                            allen.composition(allen.string.to.set("m"),
                                              allen.string.to.set("m"))),
-                       stop(sprintf("Unknown subset, '%s'", subset)))
-    title_string <- switch(subset,
-                           none = "Basic Allen relations",
+                       stop(sprintf("Unknown relation, '%s'", subset)))
+    title_string <- switch(relations,
+                           basic = "Basic Allen relations",
                            concurrent = "Basic concurrent relations",
                            six = "Basic Allen relations with distinct endpoints",
                            inherit = "Basic inheritance relations",
@@ -180,7 +201,7 @@ illustrate_allen_relations <- function(subset = "none") {
                            tradition = "Composite tradition relations",
                            sequence = "Composite stratigraphic relations",
                            anagenesis = "Composite anagenetic relations",
-                           stop(sprintf("unknown subset, '%s'", subset)))
+                           stop(sprintf("unknown relation, '%s'", relations)))
     node <- allen_basic_relation_strings()
     x <- allen_lattice_x()
     y <- allen_lattice_y()
