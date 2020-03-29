@@ -20,5 +20,5 @@ Imports:
     ggraph,
     ggplot2,
     khroma
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr

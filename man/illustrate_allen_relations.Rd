@@ -9,7 +9,10 @@ illustrate_allen_relations(subset = "none")
 \arguments{
 \item{subset}{One of "none" (default),
 "concurrent" to highlight concurrent relations,
-or "six" to highlight relations with distinct endpoints}
+"six" to highlight relations with distinct endpoints,
+"inherit" to highlight chronological information in an inheritance
+relationship, or
+"donate" to highlight chronological information in a donation relationship.}
 }
 \value{
 A dataframe for input to allen_plot_single()

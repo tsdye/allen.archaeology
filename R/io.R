@@ -20,6 +20,8 @@
 #'
 #' @author Thomas S. Dye
 #'
+#' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
+#'
 allen.read.mcmc.chains <- function(mcmc.file,
                                    positions,
                                    mcmc.file.2 = NULL,

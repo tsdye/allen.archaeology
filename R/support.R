@@ -138,3 +138,60 @@ allen_code_to_string <- function(code) {
            P = "preceded by",
            stop("unrecognized code"))
 }
+
+#' Convert a string containing Allen relation codes to a relation set
+#'
+#' Characters in the string that are not Allen relation codes are
+#' not identified and are added to the set.
+#'
+#' @param s A string with Allen relation codes.
+#'
+#' @return A vector of single letter Allen relation codes.
+#'
+#' @author Thomas S. Dye
+#'
+#' @export
+allen.string.to.set <- function(s)
+{
+    res <- strsplit(s, "")
+    unlist(res)
+}
+
+#' Convert an Allen relation set to a named vector
+#'
+#' Set elements that are not Allen relation codes are silently ignored.
+#'
+#' @param s An Allen relation set, a vector of single letter codes.
+#'
+#' @return A named result vector.
+#'
+#' @author Thomas S. Dye
+#'
+#' @export
+allen.set.to.vector <- function(s)
+{
+    res <- allen.create.result.vector()
+    for(x in 1:length(s)) {
+        res <- allen.update.result(res, s[x])
+        }
+    res
+}
+
+#' Convert a string containing Allen relation codes to a result vector
+#'
+#' A result vector is named with Allen relation codes and contains counts of
+#' observed relations.
+#'
+#' @param s A string with Allen relation codes
+#'
+#' @return A named result vector
+#'
+#' @author Thomas S. Dye
+#'
+#' @export
+allen.string.to.vector <- function(s)
+{
+    s.set <- allen.string.to.set(s)
+    res <- allen.set.to.vector(s.set)
+    res
+}

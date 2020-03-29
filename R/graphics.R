@@ -136,8 +136,8 @@ allen_plot_single <- function(allen_set,
     g <- g + ylim(min_y - pad, max_y + pad)
     g <- g + ggtitle(allen_set$title)
     g <- g + khroma::scale_colour_iridescent()
-    g <- g + ggraph::geom_node_label(mapping = aes(label = allen_set$node,
-                                                   colour = allen_set$result),
+    g <- g + ggraph::geom_node_label(mapping = aes(label = node,
+                                                   colour = result),
                                      data = allen_set,
                                      size = font_size / .pt)
     g <- g + labs(colour = "Likeli-\nhood")

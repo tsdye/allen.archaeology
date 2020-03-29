@@ -16,6 +16,7 @@
 #' Bayesian calibration application produced the MCMC output
 #'
 #' @return A dataframe suitable for plotting with ggraph
+#' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
 #' @export
 #'
 allen_relate_phases <- function(mcmc,
@@ -79,6 +80,7 @@ allen_relate_phases <- function(mcmc,
 #' Bayesian calibration application produced the MCMC output
 #'
 #' @return a list with the following components:
+#' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
 #'
 allen_relation_summary <- function(mcmc, phases, app = "chronomodel") {
     chains <- switch(app,
@@ -129,7 +131,10 @@ allen_relation_summary <- function(mcmc, phases, app = "chronomodel") {
 #'
 #' @param subset One of "none" (default),
 #' "concurrent" to highlight concurrent relations,
-#' or "six" to highlight relations with distinct endpoints
+#' "six" to highlight relations with distinct endpoints,
+#' "inherit" to highlight chronological information in an inheritance
+#' relationship, or
+#' "donate" to highlight chronological information in a donation relationship.
 #'
 #' @return A dataframe for input to allen_plot_single()
 #'
@@ -140,11 +145,41 @@ illustrate_allen_relations <- function(subset = "none") {
                        none = allen.create.result.vector(initial.value = 1),
                        concurrent = allen.create.concurrent.vector(),
                        six = allen.create.distinct.endpoint.vector(),
+                       inherit = allen.string.to.vector("MOfd"),
+                       donate = allen.string.to.vector("moFD"),
+                       stratigraphic = allen.string.to.vector("mM"),
+                       anagenetic = allen.string.to.vector("mM"),
+                       cladogenetic = allen.string.to.vector("MOfdmoFD"),
+                       donors = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("moFD"),
+                                             allen.string.to.set("MOfd"))),
+                       inheritors = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("MOfd"),
+                                             allen.string.to.set("moFD"))),
+                       tradition = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("moFD"),
+                                             allen.string.to.set("moFD"))),
+                       sequence = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("m"),
+                                             allen.string.to.set("m"))),
+                       anagenesis = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("m"),
+                                             allen.string.to.set("m"))),
                        stop(sprintf("Unknown subset, '%s'", subset)))
     title_string <- switch(subset,
-                           none = "Allen basic relations",
-                           concurrent = "Allen concurrent relations",
-                           six = "Allen relations with distinct endpoints",
+                           none = "Basic Allen relations",
+                           concurrent = "Basic concurrent relations",
+                           six = "Basic Allen relations with distinct endpoints",
+                           inherit = "Basic inheritance relations",
+                           donate = "Basic donation relations",
+                           stratigraphic = "Basic stratigraphic relations",
+                           anagenetic = "Basic anagenetic relations",
+                           cladogenetic = "Basic cladogenetic relations",
+                           donors = "Composite donation relations",
+                           inheritors = "Composite inheritance relations",
+                           tradition = "Composite tradition relations",
+                           sequence = "Composite stratigraphic relations",
+                           anagenesis = "Composite anagenetic relations",
                            stop(sprintf("unknown subset, '%s'", subset)))
     node <- allen_basic_relation_strings()
     x <- allen_lattice_x()
