@@ -30,11 +30,12 @@
 #'
 #' @author Thomas S. Dye
 #'
-  allen.update.result <- function(result.vector, relation)
-  {
+allen.update.result <- function(result.vector, relation) {
+    if(!is.result.vector(result.vector))
+        stop("Unable to update object that is not a result vector.")
     result.vector[relation] <- result.vector[relation] + 1
     result.vector
-  }
+}
 
 #' Calculate the Allen relation of two intervals
 #'
@@ -49,18 +50,20 @@
 #'
 #' @author Thomas S. Dye
 #'
-  allen.calculate.relations.2 <- function(result.vector, mcmc.chain.list)
-  {
+allen.calculate.relations.2 <- function(result.vector, mcmc.chain.list)
+{
+    if(!is.result.vector(result.vector))
+        stop("Unable to record relations to an object that is not a result vector.")
     for(x in seq_len(dim(mcmc.chain.list)[1]))
     {
-      relation <- allen.relation(mcmc.chain.list[x, 1],
-                                 mcmc.chain.list[x, 2],
-                                 mcmc.chain.list[x, 3],
-                                 mcmc.chain.list[x, 4])
-      result.vector <- allen.update.result(result.vector, relation)
+        relation <- allen.relation(mcmc.chain.list[x, 1],
+                                   mcmc.chain.list[x, 2],
+                                   mcmc.chain.list[x, 3],
+                                   mcmc.chain.list[x, 4])
+        result.vector <- allen.update.result(result.vector, relation)
     }
     result.vector
-  }
+}
 
 #' Calculate the proportion of each relation in a result vector
 #'
@@ -77,6 +80,8 @@
 #'
 allen_proportion_results <- function(result_vector, sort = TRUE)
 {
+    if(!is.result.vector(result_vector))
+        stop("Unable to proportion results for an object that is not a result vector.")
     res <- result_vector / sum(result_vector)
     names(res) <- names(result_vector)
     if(sort)
@@ -97,15 +102,14 @@ allen_proportion_results <- function(result_vector, sort = TRUE)
 #'
 #' @author Thomas S. Dye
 #'
-  allen.compare.indeterminate.intervals <- function(result.vector, mcmc.chains)
-  {
-    if((!is.vector(result.vector)) || (length(result.vector) != 13)
-       || (names(result.vector) != c("p", "m", "o", "F", "s", "D", "e", "d",
-                                     "S", "f", "O", "M", "P"))
-       || (sum(result.vector) != 0))
-      stop("result vector is malformed or contains data")
+allen.compare.indeterminate.intervals <- function(result.vector, mcmc.chains)
+{
+    if(!is.result.vector(result.vector))
+        stop("Unable to proportion results for an object that is not a result vector.")
+    if(sum(result.vector) != 0)
+      stop("Result vector is malformed or contains data.")
     if(length(unique(lengths(mcmc.chains))) != 1L)
-      stop("data parameters must be vectors of the same length")
+      stop("MCMC chains must be the same length")
     for(x in seq_along(mcmc.chains[[1]]))
     {
         result <- allen.relation(mcmc.chains[[1]][x], mcmc.chains[[2]][x],
@@ -123,40 +127,42 @@ allen_proportion_results <- function(result_vector, sort = TRUE)
 #' relations adjacent in the Nokel lattice.  Optionally, the tallies
 #' for relations with indistinct endpoints can be ignored.
 #'
-#' @param result.vector A full result vector
+#' @param result.vector A result vector or an object than can be converted
+#' to a result vector
 #' @param include.indistinct When TRUE (default), randomly assign tallies for
 #' relations with indistinct endpoints to an adjacent relation.  When FALSE,
 #' ignore tallies for relations with indistinct endpoints.
 #'
 #' @author Thomas S. Dye
 #'
-allen.coerce.six <- function(result.vector, include.indistinct = TRUE)
-{
-  ret <- result.vector
-  allen.six <- allen.six.value.set()
-  if (include.indistinct) {
-    allen.other <- allen.complement.set(allen.six)
-    for (relation in allen.other)
-    {
-      neighbors <- switch(relation,
-                          "m" = c("p","o"),
-                          "F" = c("o", "D"),
-                          "s" = c("o", "d"),
-                          "e" = c("o", "O", "d", "D"),
-                          "S" = c("D", "O"),
-                          "f" = c("d", "O"),
-                          "M" = c("O", "P"),
-                          stop("unrecognized relation"))
-      for (foo in seq_len(ret[relation]))
-      {
-        ret <- allen.update.result(ret, sample(neighbors, 1, replace=TRUE))
-        ret[relation] <- ret[relation] - 1
-      }
+allen.coerce.six <- function(result.vector, include.indistinct = TRUE) {
+    if(!is.result.vector(result.vector))
+        stop("Unable to proportion results for an object that is not a result vector.")
+    ret <- result.vector
+    allen.six <- allen.six.value.set()
+    if (include.indistinct) {
+        allen.other <- allen.complement.set(allen.six)
+        for (relation in allen.other)
+        {
+            neighbors <- switch(relation,
+                                "m" = c("p","o"),
+                                "F" = c("o", "D"),
+                                "s" = c("o", "d"),
+                                "e" = c("o", "O", "d", "D"),
+                                "S" = c("D", "O"),
+                                "f" = c("d", "O"),
+                                "M" = c("O", "P"),
+                                stop("unrecognized relation"))
+            for (foo in seq_len(ret[relation]))
+            {
+                ret <- allen.update.result(ret, sample(neighbors, 1, replace=TRUE))
+                ret[relation] <- ret[relation] - 1
+            }
+        }
+        if (sum(ret[allen.other]) != 0) stop("coercion failed")
     }
-    if (sum(ret[allen.other]) != 0) stop("coercion failed")
-  }
-  ret <- ret[allen.six]
-  ret
+    ret <- ret[allen.six]
+    ret
 }
 
 #' Create a result vector identifying concurrent relations
@@ -194,4 +200,29 @@ allen.create.result.vector <- function(initial.value = 0)
   result.vector <- rep(initial.value, times = 13)
   names(result.vector) <- allen.basic.relation.set()
   result.vector
+}
+
+#' Convert to a result vector
+#'
+#' Expects an Allen set represented as a string, vector, or result vector
+#' and converts, if necessary, to a result vector.
+#'
+#' @param obj Object to convert to a result vector.
+#'
+#' @return A result vector or an error if obj is not an Allen set.
+#'
+#' @author Thomas S. Dye
+#'
+convert.to.result.vector <- function(obj) {
+    if(is.result.vector(obj))
+        ret <- obj
+    else
+        if(is.set.vector(obj))
+            ret <- allen.set.to.vector(obj)
+    else
+        if(is.set.string(obj))
+            ret <- allen.string.to.vector(obj)
+    else
+        stop("Object cannot be converted to a result set.")
+    ret
 }

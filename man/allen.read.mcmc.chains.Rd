@@ -12,7 +12,8 @@ allen.read.mcmc.chains(
   names = c("Interval 1", "Interval 2"),
   app = "bcal",
   decimal = ".",
-  separator = ","
+  separator = ",",
+  quiet = "partial"
 )
 }
 \arguments{
@@ -32,6 +33,10 @@ the positions parameters(s)}
 \item{decimal}{optional decimal character for Chronomodel output}
 
 \item{separator}{optional separator character for Chronomodel output}
+
+\item{quiet}{One of "no" to allow messages and warnings,
+"partial" (default) to suppress messages and allow warnings, or "yes"
+to suppress messages and warnings.}
 }
 \value{
 a list with two components: result and names, where result

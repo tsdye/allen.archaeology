@@ -61,17 +61,13 @@ allen_basic_relation_strings <- function() {
 #'
 #' @author Thomas S. Dye
 #'
-  allen.complement.set <- function(allen.set)
-  {
+allen.complement.set <- function(allen.set)
+{
+    result.set <- ensure.allen.set.vector(allen.set)
     allen.full.set <- allen.basic.relation.set()
-    switch(mode(allen.set),
-           "NULL" = result.set <- "",
-           "character" = result.set <- allen.set,
-           "numeric" = result.set <- names(allen.set[allen.set != 0]),
-           stop("unrecognized Allen set"))
-    complement.set <- setdiff(allen.full.set, result.set)
-    complement.set
-  }
+    ret <- setdiff(allen.full.set, result.set)
+    ret
+}
 
 #' Intersection of Allen relation sets
 #'
@@ -86,21 +82,13 @@ allen_basic_relation_strings <- function() {
 #'
 #' @author Thomas S. Dye
 #'
-  allen.relations.intersection <- function(allen.set.1, allen.set.2)
-  {
-    switch(mode(allen.set.1),
-           NULL = result.set.1 <- NULL,
-           "character" = result.set.1 <- allen.set.1,
-           "numeric" = result.set.1 <- names(allen.set.1[allen.set.1 != 0]),
-           stop("unrecognized Allen set"))
-    switch(mode(allen.set.2),
-           NULL = result.set.2 <- NULL,
-           "character" = result.set.2 <- allen.set.2,
-           "numeric" = result.set.2 <- names(allen.set.2[allen.set.2 != 0]),
-           stop("unrecognized Allen set"))
+allen.relations.intersection <- function(allen.set.1, allen.set.2)
+{
+    result.set.1 <- ensure.allen.set.vector(allen.set.1)
+    result.set.2 <- ensure.allen.set.vector(allen.set.2)
     ret <- intersect(result.set.1, result.set.2)
     ret
-  }
+}
 
 #' The Allen relation set represented by the non-zero elements of a result vector
 #'
@@ -113,11 +101,32 @@ allen_basic_relation_strings <- function() {
 #'
 #' @author Thomas S. Dye
 #'
-  allen.set.vector.from.result <- function(result.vector)
-  {
+allen.set.vector.from.result <- function(result.vector)
+{
+    if(!is.result.vector(result.vector))
+        stop("Cannot convert an object that is not a result vector.")
     ret <- names(result.vector[result.vector != 0])
     ret
-  }
+}
+
+#' String representation of an Allen set from a result vector
+#'
+#' Given a result vector, return a string corresponding to the non-zero
+#' elements of the result vector
+#'
+#' @param result.vector A result vector
+#'
+#' @return A string representing an Allen set
+#'
+#' @author Thomas S. Dye
+#'
+allen.string.from.result <- function(result.vector) {
+    if(!is.result.vector(result.vector))
+        stop("Cannot convert an object that is not a result vector.")
+    ret <- names(result.vector[result.vector != 0])
+    ret <- paste(ret, collapse = "")
+    ret
+}
 
 #' Coerce a string to an Allen relation set.
 #'
@@ -130,8 +139,10 @@ allen_basic_relation_strings <- function() {
 #'
 #' @author Thomas S. Dye
 #'
-  allen.set.vector <- function(allen.set.string)
-  {
+allen.set.vector <- function(allen.set.string)
+{
+    if(!is.set.string)
+        stop("Cannot convert an object that is not a string representation of an Allen set.")
     ret <- unlist(strsplit(allen.set.string, ""))
     ret
   }
@@ -148,18 +159,10 @@ allen_basic_relation_strings <- function() {
 #'
 #' @author Thomas S. Dye
 #'
-  allen.relations.union <- function(allen.set.1, allen.set.2)
-  {
-    switch(mode(allen.set.1),
-           NULL = result.set.1 <- NULL,
-           "character" = result.set.1 <- allen.set.1,
-           "numeric" = result.set.1 <- names(allen.set.1[allen.set.1 != 0]),
-           stop("unrecognized Allen set"))
-    switch(mode(allen.set.2),
-           NULL = result.set.2 <- NULL,
-           "character" = result.set.2 <- allen.set.2,
-           "numeric" = result.set.2 <- names(allen.set.2[allen.set.2 != 0]),
-           stop("unrecognized Allen set"))
+allen.relations.union <- function(allen.set.1, allen.set.2)
+{
+    result.set.1 <- ensure.allen.set.vector(allen.set.1)
+    result.set.2 <- ensure.allen.set.vector(allen.set.2)
     ret <- union(result.set.1, result.set.2)
     ret
   }
@@ -175,39 +178,35 @@ allen_basic_relation_strings <- function() {
 #'
 #' @author Thomas S. Dye
 #'
-  allen.converse.set <- function(allen.set)
-  {
+allen.converse.set <- function(allen.set)
+{
     allen.converse <- function(relation)
     {
-      result <- switch(relation,
-                       "p" = "P",
-                       "m" = "M",
-                       "o" = "O",
-                       "F" = "f",
-                       "D" = "d",
-                       "s" = "S",
-                       "e" = "e",
-                       "S" = "s",
-                       "d" = "D",
-                       "f" = "F",
-                       "O" = "o",
-                       "M" = "m",
-                       "P" = "p",
-                       NULL = NULL,
-                       stop("unrecognized Allen relation identifier"))
-      result
+        result <- switch(relation,
+                         "p" = "P",
+                         "m" = "M",
+                         "o" = "O",
+                         "F" = "f",
+                         "D" = "d",
+                         "s" = "S",
+                         "e" = "e",
+                         "S" = "s",
+                         "d" = "D",
+                         "f" = "F",
+                         "O" = "o",
+                         "M" = "m",
+                         "P" = "p",
+                         NULL = NULL,
+                         stop("unrecognized Allen relation identifier"))
+        result
     }
-    switch(mode(allen.set),
-           NULL = result.set <- NULL,
-           "character" = result.set <- allen.set,
-           "numeric" = result.set <- names(allen.set[allen.set != 0]),
-           stop("unrecognized Allen set"))
+    result.set <- ensure.allen.set.vector(allen.set)
     if (is.null(result.set))
-      converse.set <- NULL
+        converse.set <- NULL
     else
-      converse.set <- sapply(result.set, allen.converse)
+        converse.set <- sapply(result.set, allen.converse)
     converse.set
-  }
+}
 
 #' Allen relation set for intervals with distinct endpoints.
 #'
@@ -223,3 +222,29 @@ allen_basic_relation_strings <- function() {
     ret <- c("p", "o", "D", "d", "O", "P");
     ret
   }
+
+#' Ensure an Allen set is represented as a vector of single character strings
+#'
+#' Expects a string, set vector, or result vector and will stop with an
+#' error if something else is encountered.
+#'
+#' @param obj An Allen set represented as a string, a set vector, or a
+#' result vector.
+#'
+#' @return An Allen set represented as a set vector.
+#'
+#' @author Thomas S. Dye
+#'
+ensure.allen.set.vector <- function(obj) {
+    if(is.set.vector(obj))
+        result.set <- obj
+    else
+        if(is.set.string(obj))
+            result.set <- allen.string.to.set(obj)
+    else
+        if(is.result.vector(obj))
+            result.set <- allen.set.vector.from.result(obj)
+    else
+        stop("Unrecognized Allen set.")
+    result.set
+}

@@ -7,7 +7,8 @@
 allen.coerce.six(result.vector, include.indistinct = TRUE)
 }
 \arguments{
-\item{result.vector}{A full result vector}
+\item{result.vector}{A result vector or an object than can be converted
+to a result vector}
 
 \item{include.indistinct}{When TRUE (default), randomly assign tallies for
 relations with indistinct endpoints to an adjacent relation.  When FALSE,

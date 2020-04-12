@@ -195,3 +195,41 @@ allen.string.to.vector <- function(s)
     res <- allen.set.to.vector(s.set)
     res
 }
+
+#' Order Allen relations in a string representing an Allen set
+#'
+#' @param s A string representing an Allen set
+#'
+#' @return A string ordered conventionally
+#'
+#' @author Thomas S. Dye
+allen.order.string <- function(s) {
+    ret <- allen.string.to.vector(s)
+    ret <- allen.string.from.result(ret)
+    ret
+}
+
+#' Nokel lattice y coordinates
+#'
+#' A vector of arbitrary coordinates for lattice node placement
+#'
+#' @return A vector of integers
+#'
+#' @author Thomas S. Dye
+#'
+allen_lattice_y <- function() {
+    y <- c(8, 7, 6, 5, 5, 4, 4, 4, 3, 3, 2, 1, 0)
+}
+
+#' Nokel lattice x coordinates
+#'
+#' A vector of arbitrary coordinates for lattice node placement
+#'
+#' @return A vector of integers
+#'
+#' @author Thomas S. Dye
+#'
+allen_lattice_x <- function() {
+    x <- c(0, 0, 0, -1, 1, -2, 0, 2, -1, 1, 0, 0, 0)
+    x
+}

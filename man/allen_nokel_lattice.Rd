@@ -16,7 +16,7 @@ allen_nokel_lattice(
 }
 \arguments{
 \item{allen_set}{a dataframe, such as the one produced by
-illustrate.allen.relations()}
+illustrate_allen_relations()}
 
 \item{file_name}{path to the optional graphics file}
 
@@ -34,7 +34,7 @@ illustrate.allen.relations()}
 called for its side effects
 }
 \description{
-Plot a single N\\u00F6kel lattice to the display and optionally to a file.
+Plot a single Nökel lattice to the display and optionally to a file.
 }
 \author{
 Thomas S. Dye

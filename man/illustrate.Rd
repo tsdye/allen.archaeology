@@ -35,11 +35,11 @@ illustrate(relations = "basic", ...)
 \item{...}{Named arguments to be passed on to \code{allen_plot_single()}.}
 }
 \value{
-NULL.  Called for its side effects.
+A layout_tbl_graph object.
 }
 \description{
 Illustrate basic and composite Allen relations for several chronological
-model domains with a N\\u00F6kel lattice. Chronological model domains include
+model domains with a Nokel lattice. Chronological model domains include
 stratigraphy, anagenetic artifact change, and a variety of cladogenetic
 processes of artifact change, including what archaeologists label tradition,
 innovation, and borrowing. The illustrations show that stratigraphy and
@@ -47,6 +47,27 @@ anagenetic artifact change each offer the necessary information to structure
 a chronological model deductively. In contrast, cladogenetic processes of
 artifact change comprise relatively weak sources of information that offer
 little guidance for the chronological model builder.
+}
+\examples{
+
+# Plot to the R graphics device
+illustrate()
+
+# Save layout_tbl_graph object to a variable
+# then plot to the R graphics device
+
+foo <- illustrate()
+foo
+
+}
+\references{
+Harris, E. \emph{Principles of Archaeological Stratigraphy}. Second edition.
+London: Academic Press.
+
+Lyman, R. Lee and Michael J. O'Brien.  Seriation and cladistics: The
+difference between anagenetic and cladogenetic evolution.  Chapter 5 in
+\emph{Mapping Our Ancestors: Phylogenetic Approaches in Anthropology and
+Prehistory.} New Brunswick: AldineTransaction.
 }
 \author{
 Thomas S. Dye

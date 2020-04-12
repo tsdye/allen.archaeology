@@ -7,22 +7,24 @@
 #'
 allen.composition <- function(allen.set.1, allen.set.2)
 {
-  if(is.null(allen.set.1) || is.null(allen.set.2))
-    ret <- NULL
-  else
-  {
-    lookup.table <- composition.lookup.table()
-    relation.pairs <- expand.grid(allen.set.1, allen.set.2,
-                                  KEEP.OUT.ATTRS=FALSE,
-                                  stringsAsFactors=FALSE)
-    ret <- c()
-    for(pair in seq_len(dim(relation.pairs)[1]))
+    if(!is.set.vector(allen.set.1) || !is.set.vector(allen.set.2))
+        stop("Unrecognized parameter passed to allen.composition.")
+    if(is.null(allen.set.1) || is.null(allen.set.2))
+        ret <- NULL
+    else
     {
-      relation <- lookup.table[relation.pairs[pair,1], relation.pairs[pair,2]]
-      ret <- allen.relations.union(ret, allen.set.vector(relation))
+        lookup.table <- composition.lookup.table()
+        relation.pairs <- expand.grid(allen.set.1, allen.set.2,
+                                      KEEP.OUT.ATTRS=FALSE,
+                                      stringsAsFactors=FALSE)
+        ret <- c()
+        for(pair in seq_len(dim(relation.pairs)[1]))
+        {
+            relation <- lookup.table[relation.pairs[pair,1], relation.pairs[pair,2]]
+            ret <- allen.relations.union(ret, allen.string.to.set(relation))
+        }
     }
-  }
-  ret
+    ret
 }
 
 #' Construct an Allen composition lookup table

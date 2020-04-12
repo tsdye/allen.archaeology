@@ -16,13 +16,15 @@
 #' Bayesian calibration application produced the MCMC output
 #'
 #' @return A dataframe suitable for plotting with ggraph
+#'
 #' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
+#'
 #' @export
 #'
 allen_relate_phases <- function(mcmc,
                                 phases_1,
                                 phases_2,
-                                app = "chronomodel") {
+                                app = "bcal") {
     just_odd <- function(x) x[ x %% 2 == 1 ]
     relations <- NULL
     chains.df <- switch(app,
@@ -30,7 +32,7 @@ allen_relate_phases <- function(mcmc,
                                                                       quiet = "partial"),
                         oxcal = ArchaeoPhases::read_oxcal(mcmc, quiet = "partial"),
                         bcal = ArchaeoPhases::read_bcal(mcmc, quiet ="partial"),
-                        stop(sprintf("unknown app, '%s'", app)))
+                        stop(sprintf("Unknown application, '%s'", app)))
     ## chains.df <- as.data.frame(chains)
     term_1 <- just_odd(phases_1)
     term_2 <- just_odd(phases_2)
@@ -71,54 +73,6 @@ allen_relate_phases <- function(mcmc,
     relations
 }
 
-#' Summarize the relation of two phases
-#'
-#' @param mcmc path to a csv file with MCMC output
-#' @param phases a vector with four column indices representing the start
-#' and end of two phases
-#' @param app one of 'bcal', 'OxCal', or 'chronomodel' to specify which
-#' Bayesian calibration application produced the MCMC output
-#'
-#' @return a list with the following components:
-#' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
-#'
-allen_relation_summary <- function(mcmc, phases, app = "chronomodel") {
-    chains <- switch(app,
-                     chronomodel = ArchaeoPhases::read_chronomodel(mcmc,
-                                                                   quiet = "partial"),
-                     oxcal = ArchaeoPhases::read_oxcal(mcmc, quiet = "partial"),
-                     bcal = ArchaeoPhases::read_bcal(mcmc, quiet = "partial"))
-    chains <- chains[,phases]
-    names <- allen.check.names(colnames(chains))
-    zero.vector <- allen.create.result.vector()
-    result.full <- allen.calculate.relations.2(zero.vector, chains)
-    result.six <- allen.coerce.six(result.full)
-    result.six.proportion <- allen_proportion_results(result.six)
-    result.full.proportion <- allen_proportion_results(result.full)
-    result.non.zero <- result.full.proportion[result.full.proportion != 0]
-    concur.set <- allen.concurrent.relation.set()
-    relation.set <- allen.relations.set(result.full)
-    non.zero.concurs <- allen.relations.intersection(names(result.non.zero),
-                                                     concur.set)
-    concurrence_string <- allen.relations.concur(result.full)
-    proportion.concurs <- sum(result.full.proportion[non.zero.concurs])
-    max_code <- names(result.six[result.six == max(result.six)])
-    relation_string <- allen_code_to_string(max_code)
-    result_string <- sprintf("%s %s %s",
-                             names$first,
-                             relation_string,
-                             names$second)
-    list(result = result_string,
-         relation_set = relation.set,
-         concurrence = concurrence_string,
-         full_result = result.full,
-         six_value_result = result.six,
-         full_proportion = round(result.full.proportion, digits = 3),
-         six_value_proportion = round(result.six.proportion, digits = 3),
-         concurrence_proportion = proportion.concurs,
-         mcmc_file = mcmc,
-         application = app)
-}
 
 #' Data for an illustrative graphic:
 #'
@@ -138,25 +92,33 @@ allen_relation_summary <- function(mcmc, phases, app = "chronomodel") {
 #' \item{six}{show relations with distinct endpoints;}
 #' \item{inherit}{show chronological information about a transmission
 #'     relationship from the receiver's point of view;}
-#' \item{donate}{show chronological information from the giver's point of view during
+#' \item{contribute}{show chronological information from the giver's point of view during
 #'     transmission;}
 #' \item{stratigraphic}{show the basic stratigraphic relations established by an
 #'     observation of superposition;}
 #' \item{anagenetic}{show the basic relations of artifact
 #'     change without branching;}
 #' \item{cladogenetic}{show the basic relations of artifact change with branching;}
-#' \item{donors}{show the composite relations of two donors to a borrowing
+#' \item{contributors}{show the composite relations of two contributors to a reticulation
 #'     occurrence;}
-#' \item{inheritors}{show the composite relations of two entities produced by
+#' \item{innovations}{show the composite relations of two entities produced by
 #'     innovation from a single source;}
-#' \item{tradition}{show the composite relations of tradition during
-#'     cladogenesis;}
 #' \item{sequence}{show the composite relations of superposition
 #'     in a stratigraphic sequence; or}
 #' \item{anagenesis}{show the composite relations of transmission during
 #'     anagenesis.}}
 #'
 #' @return A dataframe for input to allen_plot_single()
+#'
+#' @references
+#'
+#' Harris, E. \emph{Principles of Archaeological Stratigraphy}. Second edition.
+#' London: Academic Press.
+#'
+#' Lyman, R. Lee and Michael J. O'Brien.  Seriation and cladistics: The
+#' difference between anagenetic and cladogenetic evolution.  Chapter 5 in
+#' \emph{Mapping Our Ancestors: Phylogenetic Approaches in Anthropology and
+#' Prehistory.} New Brunswick: AldineTransaction.
 #'
 #' @export
 #'
@@ -166,41 +128,45 @@ illustrate_allen_relations <- function(relations = "basic") {
                        basic = allen.create.result.vector(initial.value = 1),
                        concurrent = allen.create.concurrent.vector(),
                        six = allen.create.distinct.endpoint.vector(),
-                       inherit = allen.string.to.vector("MOfd"),
-                       donate = allen.string.to.vector("moFD"),
+                       inherit = allen.string.to.vector("oFD"),
+                       contribute = allen.string.to.vector("moFD"),
                        stratigraphic = allen.string.to.vector("mM"),
                        anagenetic = allen.string.to.vector("mM"),
-                       cladogenetic = allen.string.to.vector("MOfdmoFD"),
-                       donors = allen.set.to.vector(
+                       cladogenetic = allen.string.to.vector("OfdoFD"),
+                       contributors = allen.set.to.vector(
                            allen.composition(allen.string.to.set("moFD"),
                                              allen.string.to.set("MOfd"))),
-                       inheritors = allen.set.to.vector(
-                           allen.composition(allen.string.to.set("MOfd"),
-                                             allen.string.to.set("moFD"))),
-                       tradition = allen.set.to.vector(
-                           allen.composition(allen.string.to.set("moFD"),
-                                             allen.string.to.set("moFD"))),
+                       innovations = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("Ofd"),
+                                             allen.string.to.set("oFD"))),
                        sequence = allen.set.to.vector(
                            allen.composition(allen.string.to.set("m"),
                                              allen.string.to.set("m"))),
                        anagenesis = allen.set.to.vector(
                            allen.composition(allen.string.to.set("m"),
                                              allen.string.to.set("m"))),
-                       stop(sprintf("Unknown relation, '%s'", subset)))
+                       incorporation.2 = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("m"),
+                                             allen.string.to.set("Ofd"))),
+                       incorporation.1 = allen.set.to.vector(
+                           allen.composition(allen.string.to.set("m"),
+                                             allen.string.to.set("M"))),
+                       stop(sprintf("Unknown relation, '%s'", relations)))
     title_string <- switch(relations,
                            basic = "Basic Allen relations",
                            concurrent = "Basic concurrent relations",
                            six = "Basic Allen relations with distinct endpoints",
                            inherit = "Basic inheritance relations",
-                           donate = "Basic donation relations",
+                           contribute = "Basic contribution relations",
                            stratigraphic = "Basic stratigraphic relations",
                            anagenetic = "Basic anagenetic relations",
                            cladogenetic = "Basic cladogenetic relations",
-                           donors = "Composite donation relations",
-                           inheritors = "Composite inheritance relations",
-                           tradition = "Composite tradition relations",
-                           sequence = "Composite stratigraphic relations",
-                           anagenesis = "Composite anagenetic relations",
+                           contributors = "Composite contributor relation",
+                           innovations = "Composite innovation relation",
+                           sequence = "Composite stratigraphic relation",
+                           anagenesis = "Composite anagenetic relation",
+                           incorporation.2 = "Composite contributor relation with two successors",
+                           incorporation.1 = "Composite contributor relation with one successor",
                            stop(sprintf("unknown relation, '%s'", relations)))
     node <- allen_basic_relation_strings()
     x <- allen_lattice_x()
@@ -209,28 +175,55 @@ illustrate_allen_relations <- function(relations = "basic") {
     df <- cbind.data.frame(x, y, result, node, title)
     df
 }
-
-#' Nokel lattice y coordinates
+#' Calculate the composite relation of two phases
 #'
-#' A vector of arbitrary coordinates for lattice node placement
+#' @param mcmc path to a csv file with MCMC output
+#' @param phases a vector with six column indices representing the start
+#' and end chains of three phases
+#' @param title a plot title
+#' @param app one of 'bcal', 'oxcal', or 'chronomodel' to specify which
+#' Bayesian calibration application produced the MCMC output
+#' @param quiet One of "no" to allow messages and warnings,
+#' "partial" (default) to suppress messages and allow warnings, or "yes"
+#' to suppress messages and warnings.
 #'
-#' @return A vector of integers
+#' @return A dataframe for input to allen_plot_single()
 #'
-#' @author Thomas S. Dye
+#' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
 #'
-allen_lattice_y <- function() {
-    y <- c(8, 7, 6, 5, 5, 4, 4, 4, 3, 3, 2, 1, 0)
-}
-
-#' Nokel lattice x coordinates
+#' @export
 #'
-#' A vector of arbitrary coordinates for lattice node placement
-#'
-#' @return A vector of integers
-#'
-#' @author Thomas S. Dye
-#'
-allen_lattice_x <- function() {
-    x <- c(0, 0, 0, -1, 1, -2, 0, 2, -1, 1, 0, 0, 0)
-    x
+allen_composite_relation <- function(mcmc,
+                                     phases,
+                                     title = c("first", "second"),
+                                     app = "bcal",
+                                     quiet = "partial") {
+    if(length(phases) != 6) stop("Chains for three phases are required.")
+    chains <- switch(app,
+                     chronomodel = read_chronomodel(mcmc,
+                                                    quiet = quiet),
+                     oxcal = read_oxcal(mcmc, quiet = quiet),
+                     bcal = read_bcal(mcmc, quiet = quiet),
+                     stop(sprintf("Unknown application, '%s'", app)))
+    chains <- chains[,phases]
+    names <- colnames(chains)
+    zero.vector <- allen.create.result.vector()
+    result.vector.1 <- allen.calculate.relations.2(zero.vector, chains[,1:4])
+    result.vector.2 <- allen.calculate.relations.2(zero.vector, chains[,3:6])
+    set.vector.1 <- allen.set.vector.from.result(result.vector.1)
+    set.vector.2 <- allen.set.vector.from.result(result.vector.2)
+    res <- allen.composition(set.vector.1, set.vector.2)
+    title_res <- paste(res, collapse = "")
+    title_res <- allen.order.string(title_res)
+    graph_title <- sprintf("Allen relation: %s(%s)%s",
+                           title[1],
+                           title_res,
+                           title[2])
+    result <- allen.set.to.vector(res)
+    node <- allen_basic_relation_strings()
+    x <- allen_lattice_x()
+    y <- allen_lattice_y()
+    title <- rep(graph_title, length(node))
+    df <- cbind.data.frame(x, y, result, node, title)
+    df
 }

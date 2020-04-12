@@ -1,9 +1,9 @@
 #' Plot a Nökel lattice
 #'
-#' Plot a single N\\u00F6kel lattice to the display and optionally to a file.
+#' Plot a single Nökel lattice to the display and optionally to a file.
 #'
 #' @param allen_set a dataframe, such as the one produced by
-#' illustrate.allen.relations()
+#' illustrate_allen_relations()
 #' @param file_name path to the optional graphics file
 #' @param graph_title title of the graph
 #' @param pad pad the left and right margins to keep labels from disappearing
@@ -27,13 +27,16 @@ allen_nokel_lattice <- function(allen_set,
                                 font_size = 11,
                                 height = 7,
                                 width = 7) {
+    if((!is.data.frame(allen_set)) ||
+       dim(allen_set)[1] != 13)
+        stop("Unrecognized data for N\u00f6kel lattice.")
   g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
   min_x <- min(allen_set$x)
   max_x <- max(allen_set$x)
   g <- g + xlim(min_x - pad, max_x + pad)
   g <- g + khroma::scale_colour_iridescent()
-  g <- g + ggraph::geom_node_label(mapping = aes(label = allen_set$node,
-                                                 colour = allen_set$result),
+  g <- g + ggraph::geom_node_label(mapping = aes(label = node,
+                                                 colour = result),
                                    data = allen_set,
                                    size = font_size / .pt)
   g <- g + ggtitle(graph_title)
@@ -76,6 +79,9 @@ allen_plot_multiple <- function(allen_set,
                                 columns = 3,
                                 height = 7,
                                 width = 7) {
+    if((!is.data.frame(allen_set)) ||
+       dim(allen_set)[1] != 13)
+        stop("Unrecognized data for N\u00f6kel lattice.")
     g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
     min_x <- min(allen_set$x)
     max_x <- max(allen_set$x)
@@ -127,6 +133,9 @@ allen_plot_single <- function(allen_set,
                               font_size = 11,
                               height = 7,
                               width = 7) {
+    if(!((is.data.frame(allen_set)) &&
+       dim(allen_set)[1] == 13))
+        stop("Unrecognized data for N\u00f6kel lattice.")
     g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
     min_x <- min(allen_set$x)
     max_x <- max(allen_set$x)

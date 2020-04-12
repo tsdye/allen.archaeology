@@ -14,19 +14,17 @@ illustrate_allen_relations(relations = "basic")
 \item{six}{show relations with distinct endpoints;}
 \item{inherit}{show chronological information about a transmission
     relationship from the receiver's point of view;}
-\item{donate}{show chronological information from the giver's point of view during
+\item{contribute}{show chronological information from the giver's point of view during
     transmission;}
 \item{stratigraphic}{show the basic stratigraphic relations established by an
     observation of superposition;}
 \item{anagenetic}{show the basic relations of artifact
     change without branching;}
 \item{cladogenetic}{show the basic relations of artifact change with branching;}
-\item{donors}{show the composite relations of two donors to a borrowing
+\item{contributors}{show the composite relations of two contributors to a reticulation
     occurrence;}
-\item{inheritors}{show the composite relations of two entities produced by
+\item{innovations}{show the composite relations of two entities produced by
     innovation from a single source;}
-\item{tradition}{show the composite relations of tradition during
-    cladogenesis;}
 \item{sequence}{show the composite relations of superposition
     in a stratigraphic sequence; or}
 \item{anagenesis}{show the composite relations of transmission during
@@ -41,6 +39,15 @@ Useful for describing the Allen operators: illustrate the full
 set of Allen relations, concurrent Allen relations, and relations with
 distinct endpoints (six-value set).  Also, useful for describing the
 chronological domains of stratification, anagenesis, and cladogenesis.
+}
+\references{
+Harris, E. \emph{Principles of Archaeological Stratigraphy}. Second edition.
+London: Academic Press.
+
+Lyman, R. Lee and Michael J. O'Brien.  Seriation and cladistics: The
+difference between anagenetic and cladogenetic evolution.  Chapter 5 in
+\emph{Mapping Our Ancestors: Phylogenetic Approaches in Anthropology and
+Prehistory.} New Brunswick: AldineTransaction.
 }
 \author{
 Thomas S. Dye
