@@ -126,6 +126,7 @@ allen_plot_multiple <- function(allen_set,
 #'
 #' @importFrom graphics title
 #' @importFrom ggplot2 .pt aes facet_wrap ggsave ggtitle labs vars xlim ylim
+#' @importFrom ggplot2 theme
 #'
 allen_plot_single <- function(allen_set,
                               file_name = NULL,
@@ -149,7 +150,12 @@ allen_plot_single <- function(allen_set,
                                                    colour = result),
                                      data = allen_set,
                                      size = font_size / .pt)
-    g <- g + labs(colour = "Likeli-\nhood")
+    if(is.illustration.vector(allen_set$result)) {
+        g <- g + theme(legend.position = "none")
+    }
+    else {
+        g <- g + labs(colour = "Likeli-\nhood")
+    }
     if(!is.null(file_name))
         ggsave(filename = file_name,
                plot = g,

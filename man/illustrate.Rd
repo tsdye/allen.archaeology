@@ -14,23 +14,26 @@ illustrate(relations = "basic", ...)
 \item{six}{show relations with distinct endpoints;}
 \item{inherit}{show chronological information about a transmission
     relationship from the receiver's point of view;}
-\item{donate}{show chronological information from the giver's point of view during
+\item{contribute}{show chronological information from the giver's point of view during
     transmission;}
 \item{stratigraphic}{show the basic stratigraphic relations established by an
     observation of superposition;}
 \item{anagenetic}{show the basic relations of artifact change without
     branching;}
 \item{cladogenetic}{show the basic relations of artifact change with branching;}
-\item{donors}{show the composite relations of two donors to a borrowing
+\item{contributors}{show the composite relations of two donors to a borrowing
     occurrence;}
-\item{inheritors}{show the composite relations of two entities produced by
+\item{innovations}{show the composite relations of two entities produced by
     innovation from a single source;}
-\item{tradition}{show the composite relations of tradition during
-    cladogenesis;}
 \item{sequence}{show the composite relations of superposition
-    in a stratigraphic sequence; or}
+    in a stratigraphic sequence;}
 \item{anagenesis}{show the composite relations of transmission during
-    anagenesis.}}}
+    anagenesis;}
+\item{incorporation.2}{show the composite relations of incorporation with
+    two successors; or}
+\item{incorporation.1}{show the composite relations of incorporation with
+    one successor.}
+}}
 
 \item{...}{Named arguments to be passed on to \code{allen_plot_single()}.}
 }

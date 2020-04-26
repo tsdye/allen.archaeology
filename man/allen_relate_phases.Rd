@@ -2,30 +2,34 @@
 % Please edit documentation in R/dataframe.R
 \name{allen_relate_phases}
 \alias{allen_relate_phases}
-\title{Relate phases}
+\title{Relate two or more phases}
 \usage{
-allen_relate_phases(mcmc, phases_1, phases_2, app = "bcal")
+allen_relate_phases(mcmc, phases_1, phases_2, app = "bcal", quiet = "partial")
 }
 \arguments{
 \item{mcmc}{path to a csv file with MCMC output}
 
-\item{phases_1}{vector of column indices for the
-beginning and end of one or more phases}
+\item{phases_1}{list of three-element vectors, the first element of which is
+the phase name and the second and third elements are the column indices
+for the beginning and end of the phase, respectively}
 
-\item{phases_2}{vector of column indices for the beginning and end
-of one or more phases}
+\item{phases_2}{list of three-element vectors, the first element of which is
+the phase name and the second and third elements are the column indices
+for the beginning and end of the phase, respectively}
 
 \item{app}{one of 'bcal', 'oxcal', or 'chronomodel' to specify which
 Bayesian calibration application produced the MCMC output}
+
+\item{quiet}{One of "no" to allow messages and warnings,
+"partial" (default) to suppress messages and allow warnings, or "yes"
+to suppress messages and warnings.}
 }
 \value{
-A dataframe suitable for plotting with ggraph
+A dataframe suitable for plotting with graph
 }
 \description{
 Reads MCMC output to create a dataframe suitable
-for plotting the Allen relations between two sets of phases
-using the six-value logic for intervals with distinct
-endpoints.
+for plotting the Allen relations between two or more phases.
 }
 \author{
 Thomas S. Dye

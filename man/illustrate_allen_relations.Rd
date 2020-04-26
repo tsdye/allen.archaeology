@@ -38,7 +38,8 @@ Create a dataframe that can be used as input for an illustrative plot.
 Useful for describing the Allen operators: illustrate the full
 set of Allen relations, concurrent Allen relations, and relations with
 distinct endpoints (six-value set).  Also, useful for describing the
-chronological domains of stratification, anagenesis, and cladogenesis.
+chronological domains of stratification, anagenesis, cladogenesis,
+reticulation, and incorporation.
 }
 \references{
 Harris, E. \emph{Principles of Archaeological Stratigraphy}. Second edition.

@@ -53,3 +53,21 @@ is.set.string <- function(obj) {
        (nchar(obj) <= 13)) TRUE
     else FALSE
 }
+
+#' Test if an object is an illustration vector
+#'
+#' An illustration vector is a vector whose elements are all
+#' zeros and ones.  It can be used to illustrate an Allen set.
+#'
+#' @param obj An object to test
+#'
+#' @return Boolean, TRUE if obj is an illustration vector, FALSE otherwise.
+#'
+#' @author Thomas S. Dye
+#'
+is.illustration.vector <- function(obj) {
+    if(!is.vector(obj))
+        stop('Expected a vector')
+    test <- obj %in% c(0,1)
+    sum(test) == length(test)
+ }

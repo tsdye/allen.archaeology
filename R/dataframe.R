@@ -1,21 +1,24 @@
-#' Relate phases
+#' Relate two or more phases
 #'
 #' Reads MCMC output to create a dataframe suitable
-#' for plotting the Allen relations between two sets of phases
-#' using the six-value logic for intervals with distinct
-#' endpoints.
+#' for plotting the Allen relations between two or more phases.
 #'
 #' @author Thomas S. Dye
 #'
 #' @param mcmc path to a csv file with MCMC output
-#' @param phases_1 vector of column indices for the
-#' beginning and end of one or more phases
-#' @param phases_2 vector of column indices for the beginning and end
-#' of one or more phases
+#' @param phases_1 list of three-element vectors, the first element of which is
+#' the phase name and the second and third elements are the column indices
+#' for the beginning and end of the phase, respectively
+#' @param phases_2 list of three-element vectors, the first element of which is
+#' the phase name and the second and third elements are the column indices
+#' for the beginning and end of the phase, respectively
 #' @param app one of 'bcal', 'oxcal', or 'chronomodel' to specify which
 #' Bayesian calibration application produced the MCMC output
+#' @param quiet One of "no" to allow messages and warnings,
+#' "partial" (default) to suppress messages and allow warnings, or "yes"
+#' to suppress messages and warnings.
 #'
-#' @return A dataframe suitable for plotting with ggraph
+#' @return A dataframe suitable for plotting with graph
 #'
 #' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
 #'
@@ -24,55 +27,39 @@
 allen_relate_phases <- function(mcmc,
                                 phases_1,
                                 phases_2,
-                                app = "bcal") {
-    just_odd <- function(x) x[ x %% 2 == 1 ]
-    relations <- NULL
-    chains.df <- switch(app,
-                        chronomodel = ArchaeoPhases::read_chronomodel(mcmc,
-                                                                      quiet = "partial"),
-                        oxcal = ArchaeoPhases::read_oxcal(mcmc, quiet = "partial"),
-                        bcal = ArchaeoPhases::read_bcal(mcmc, quiet ="partial"),
-                        stop(sprintf("Unknown application, '%s'", app)))
-    ## chains.df <- as.data.frame(chains)
-    term_1 <- just_odd(phases_1)
-    term_2 <- just_odd(phases_2)
-    for(ind_2 in term_2) {
-        positions_2 <- c(ind_2, ind_2 + 1)
-        for(ind_1 in term_1) {
-            positions_1 <- c(ind_1, ind_1 + 1, positions_2)
-            chains <- chains.df[,positions_1]
-            names <- allen.check.names(colnames(chains))
-            zero.vector <- allen.create.result.vector()
-            result.vector <- allen.calculate.relations.2(zero.vector, chains)
-            ## result.six <- allen.coerce.six(result.vector)
-            result <- allen_proportion_results(result.vector, sort = FALSE)
-            node <-  allen_basic_relation_strings()
-            max_code <- names(result[result == max(result)])
-            ## relation_string <- allen_code_to_string(max_code)
-            relation_string <- node[max_code]
-            x <- allen_lattice_x()
-            y <- allen_lattice_y()
-            title <- rep(sprintf("%s %s %s", names$first, relation_string,
-                                 names$second), length(node))
-            this.relation <- cbind.data.frame(x, y, result, node, title)
-            relations <- rbind.data.frame(relations, this.relation)
-        }
+                                app = "bcal",
+                                quiet = "partial") {
+    relate_phases <- function(first, second, all.chains) {
+        chains <- all.chains[,c(first[2:3], second[2:3])]
+        zero.vector <- allen.create.result.vector()
+        result.vector <- allen.calculate.relations.2(zero.vector, chains)
+        result <- allen_proportion_results(result.vector, sort = FALSE)
+        node <- allen_basic_relation_strings()
+        allen_codes <-  names(node)
+        allen_set <- allen_codes[result.vector != 0]
+        allen_set <- paste(allen_set, collapse = "")
+        x <- allen_lattice_x()
+        y <- allen_lattice_y()
+        title <- rep(sprintf("Allen relation: %s(%s)%s", first[1], allen_set,
+                             second[1]), length(result.vector))
+        this.relation <- cbind.data.frame(x, y, result, node, title)
+        this.relation
     }
-    ## relations$title <- factor(relations$title, levels = sort(levels(relations$title)))
-    ## allen.concurs <- allen.relations.concur(result.vector)
-    ## allen.result <- result.vector
-    ## allen.set <- allen.set.vector.from.result(result.vector)
-    ## allen.proportion <- allen.proportion.results(
-    ##     result.vector[result.vector != 0])
-    ## allen.proportion <- sort(allen.proportion, decreasing = TRUE)
-    ## concurrence.intersection <- allen.relations.intersection(
-    ##     allen.proportion, allen.concurrent.relation.set())
-    ## allen.proportion.concurs <- sum(allen.proportion[concurrence.intersection])
-    ## list(relations = relations, result = allen.result, set = allen.set,
-    ##      proportion = allen.proportion, concurrence = allen.proportion.concurs)
+    chains.df <- switch(app,
+                        chronomodel =
+                            ArchaeoPhases::read_chronomodel(mcmc, quiet = quiet),
+                        oxcal = ArchaeoPhases::read_oxcal(mcmc, quiet = quiet),
+                        bcal = ArchaeoPhases::read_bcal(mcmc, quiet = quiet),
+                        stop(sprintf("Unknown application, '%s'", app)))
+    relation_list <- mapply(FUN = relate_phases, phases_1, phases_2,
+                            MoreArgs = list(all.chains = chains.df),
+                            SIMPLIFY = FALSE)
+    relations <- NULL
+    for(x in relation_list) {
+        relations <- rbind.data.frame(relations, x)
+    }
     relations
 }
-
 
 #' Data for an illustrative graphic:
 #'
@@ -81,7 +68,8 @@ allen_relate_phases <- function(mcmc,
 #' Useful for describing the Allen operators: illustrate the full
 #' set of Allen relations, concurrent Allen relations, and relations with
 #' distinct endpoints (six-value set).  Also, useful for describing the
-#' chronological domains of stratification, anagenesis, and cladogenesis.
+#' chronological domains of stratification, anagenesis, cladogenesis,
+#' reticulation, and incorporation.
 #'
 #' @author Thomas S. Dye
 #'
@@ -175,6 +163,7 @@ illustrate_allen_relations <- function(relations = "basic") {
     df <- cbind.data.frame(x, y, result, node, title)
     df
 }
+
 #' Calculate the composite relation of two phases
 #'
 #' @param mcmc path to a csv file with MCMC output
