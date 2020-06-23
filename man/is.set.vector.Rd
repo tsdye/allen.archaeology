@@ -13,7 +13,7 @@ is.set.vector(obj)
 Boolean, TRUE if obj is a set vector, FALSE otherwise.
 }
 \description{
-Checks for mode "character", length less than 13.
+Checks for mode 'character', length less than 13.
 Note: this predicate is a (very) partial implementation.
 }
 \author{

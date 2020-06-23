@@ -28,6 +28,8 @@ labels from disappearing off the edge of the graphic}
 \item{height}{height in inches of the graphic file output}
 
 \item{width}{width in inches of the graphic file output}
+
+\item{title}{title for the plot, defaults to the title in allen_set.}
 }
 \value{
 called for its side effects

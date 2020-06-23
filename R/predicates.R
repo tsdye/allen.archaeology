@@ -10,15 +10,14 @@
 #' @export
 #'
 is.result.vector <- function(obj) {
-    if((length(obj) == 13) &&
-       (names(obj) == allen.basic.relation.set()) &&
-       (class(obj) == "numeric")) TRUE
-    else FALSE
+    if ((length(obj) == 13) && (names(obj) == allen.basic.relation.set()) && (class(obj) ==
+        "numeric"))
+        TRUE else FALSE
 }
 
 #' Test if an object is a set vector
 #'
-#' Checks for mode "character", length less than 13.
+#' Checks for mode 'character', length less than 13.
 #' Note: this predicate is a (very) partial implementation.
 #'
 #' @param obj An object to test
@@ -28,18 +27,14 @@ is.result.vector <- function(obj) {
 #' @author Thomas S. Dye
 #'
 is.set.vector <- function(obj) {
-    if(identical(obj, c()))
-        TRUE
-    else
-        if((length(obj) <= 13 &&
-           mode(obj) == "character")) TRUE
-    else
-        FALSE
+    if (identical(obj, c()))
+        TRUE else if ((length(obj) <= 13 && mode(obj) == "character"))
+        TRUE else FALSE
 }
 
 #' Test if an object is a set string
 #'
-#' Checks for mode "character", length of 1, and nchar <= 13
+#' Checks for mode 'character', length of 1, and nchar <= 13
 #'
 #' @param obj An object to test
 #'
@@ -48,10 +43,8 @@ is.set.vector <- function(obj) {
 #' @author Thomas S. Dye
 #'
 is.set.string <- function(obj) {
-    if((mode(obj) == "character") &&
-       (length(obj) == 1) &&
-       (nchar(obj) <= 13)) TRUE
-    else FALSE
+    if ((mode(obj) == "character") && (length(obj) == 1) && (nchar(obj) <= 13))
+        TRUE else FALSE
 }
 
 #' Test if an object is an illustration vector
@@ -66,8 +59,8 @@ is.set.string <- function(obj) {
 #' @author Thomas S. Dye
 #'
 is.illustration.vector <- function(obj) {
-    if(!is.vector(obj))
-        stop('Expected a vector')
-    test <- obj %in% c(0,1)
+    if (!is.vector(obj))
+        stop("Expected a vector")
+    test <- obj %in% c(0, 1)
     sum(test) == length(test)
- }
+}

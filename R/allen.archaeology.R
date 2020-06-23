@@ -15,4 +15,4 @@
 #' @docType package
 #' @name allen.archaeology
 NULL
-#> NULL
+# > NULL

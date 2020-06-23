@@ -9,14 +9,13 @@
 #' @return A named vector with distinct endpoint relations set to 1
 #' and all others set to 0.
 #'
-  allen.create.distinct.endpoint.vector <- function()
-  {
+allen.create.distinct.endpoint.vector <- function() {
     result.vector <- allen.create.result.vector(initial.value = 0)
     names(result.vector) <- allen.basic.relation.set()
     six <- allen.six.value.set()
     result.vector[six] <- 1
     result.vector
-  }
+}
 
 #' Update a result vector
 #'
@@ -31,7 +30,7 @@
 #' @author Thomas S. Dye
 #'
 allen.update.result <- function(result.vector, relation) {
-    if(!is.result.vector(result.vector))
+    if (!is.result.vector(result.vector))
         stop("Unable to update object that is not a result vector.")
     result.vector[relation] <- result.vector[relation] + 1
     result.vector
@@ -50,16 +49,12 @@ allen.update.result <- function(result.vector, relation) {
 #'
 #' @author Thomas S. Dye
 #'
-allen.calculate.relations.2 <- function(result.vector, mcmc.chain.list)
-{
-    if(!is.result.vector(result.vector))
+allen.calculate.relations.2 <- function(result.vector, mcmc.chain.list) {
+    if (!is.result.vector(result.vector))
         stop("Unable to record relations to an object that is not a result vector.")
-    for(x in seq_len(dim(mcmc.chain.list)[1]))
-    {
-        relation <- allen.relation(mcmc.chain.list[x, 1],
-                                   mcmc.chain.list[x, 2],
-                                   mcmc.chain.list[x, 3],
-                                   mcmc.chain.list[x, 4])
+    for (x in seq_len(dim(mcmc.chain.list)[1])) {
+        relation <- allen.relation(mcmc.chain.list[x, 1], mcmc.chain.list[x, 2],
+            mcmc.chain.list[x, 3], mcmc.chain.list[x, 4])
         result.vector <- allen.update.result(result.vector, relation)
     }
     result.vector
@@ -78,13 +73,12 @@ allen.calculate.relations.2 <- function(result.vector, mcmc.chain.list)
 #'
 #' @author Thomas S. Dye
 #'
-allen_proportion_results <- function(result_vector, sort = TRUE)
-{
-    if(!is.result.vector(result_vector))
+allen_proportion_results <- function(result_vector, sort = TRUE) {
+    if (!is.result.vector(result_vector))
         stop("Unable to proportion results for an object that is not a result vector.")
-    res <- result_vector / sum(result_vector)
+    res <- result_vector/sum(result_vector)
     names(res) <- names(result_vector)
-    if(sort)
+    if (sort)
         res <- sort(res, decreasing = TRUE)
     res
 }
@@ -102,22 +96,20 @@ allen_proportion_results <- function(result_vector, sort = TRUE)
 #'
 #' @author Thomas S. Dye
 #'
-allen.compare.indeterminate.intervals <- function(result.vector, mcmc.chains)
-{
-    if(!is.result.vector(result.vector))
+allen.compare.indeterminate.intervals <- function(result.vector, mcmc.chains) {
+    if (!is.result.vector(result.vector))
         stop("Unable to proportion results for an object that is not a result vector.")
-    if(sum(result.vector) != 0)
-      stop("Result vector is malformed or contains data.")
-    if(length(unique(lengths(mcmc.chains))) != 1L)
-      stop("MCMC chains must be the same length")
-    for(x in seq_along(mcmc.chains[[1]]))
-    {
-        result <- allen.relation(mcmc.chains[[1]][x], mcmc.chains[[2]][x],
-                                 mcmc.chains[[3]][x], mcmc.chains[[4]][x])
+    if (sum(result.vector) != 0)
+        stop("Result vector is malformed or contains data.")
+    if (length(unique(lengths(mcmc.chains))) != 1L)
+        stop("MCMC chains must be the same length")
+    for (x in seq_along(mcmc.chains[[1]])) {
+        result <- allen.relation(mcmc.chains[[1]][x], mcmc.chains[[2]][x], mcmc.chains[[3]][x],
+            mcmc.chains[[4]][x])
         result.vector <- allen.update.result(result.vector, result)
     }
     result.vector
-  }
+}
 
 #' Convert a 13 value result vector to a 6 value vector
 #'
@@ -136,30 +128,23 @@ allen.compare.indeterminate.intervals <- function(result.vector, mcmc.chains)
 #' @author Thomas S. Dye
 #'
 allen.coerce.six <- function(result.vector, include.indistinct = TRUE) {
-    if(!is.result.vector(result.vector))
+    if (!is.result.vector(result.vector))
         stop("Unable to proportion results for an object that is not a result vector.")
     ret <- result.vector
     allen.six <- allen.six.value.set()
     if (include.indistinct) {
         allen.other <- allen.complement.set(allen.six)
-        for (relation in allen.other)
-        {
-            neighbors <- switch(relation,
-                                "m" = c("p","o"),
-                                "F" = c("o", "D"),
-                                "s" = c("o", "d"),
-                                "e" = c("o", "O", "d", "D"),
-                                "S" = c("D", "O"),
-                                "f" = c("d", "O"),
-                                "M" = c("O", "P"),
-                                stop("unrecognized relation"))
-            for (foo in seq_len(ret[relation]))
-            {
-                ret <- allen.update.result(ret, sample(neighbors, 1, replace=TRUE))
+        for (relation in allen.other) {
+            neighbors <- switch(relation, m = c("p", "o"), F = c("o", "D"), s = c("o",
+                "d"), e = c("o", "O", "d", "D"), S = c("D", "O"), f = c("d", "O"),
+                M = c("O", "P"), stop("unrecognized relation"))
+            for (foo in seq_len(ret[relation])) {
+                ret <- allen.update.result(ret, sample(neighbors, 1, replace = TRUE))
                 ret[relation] <- ret[relation] - 1
             }
         }
-        if (sum(ret[allen.other]) != 0) stop("coercion failed")
+        if (sum(ret[allen.other]) != 0)
+            stop("coercion failed")
     }
     ret <- ret[allen.six]
     ret
@@ -174,13 +159,12 @@ allen.coerce.six <- function(result.vector, include.indistinct = TRUE) {
 #'
 #' @author Thomas S. Dye
 #'
-allen.create.concurrent.vector <- function()
-{
-  result.vector <- allen.create.result.vector(initial.value = 0)
-  names(result.vector) <- allen.basic.relation.set()
-  concur <- allen.concurrent.relation.set()
-  result.vector[concur] <- 1
-  result.vector
+allen.create.concurrent.vector <- function() {
+    result.vector <- allen.create.result.vector(initial.value = 0)
+    names(result.vector) <- allen.basic.relation.set()
+    concur <- allen.concurrent.relation.set()
+    result.vector[concur] <- 1
+    result.vector
 }
 
 #' Create a named result vector
@@ -195,11 +179,10 @@ allen.create.concurrent.vector <- function()
 #'
 #' @author Thomas S. Dye
 #'
-allen.create.result.vector <- function(initial.value = 0)
-{
-  result.vector <- rep(initial.value, times = 13)
-  names(result.vector) <- allen.basic.relation.set()
-  result.vector
+allen.create.result.vector <- function(initial.value = 0) {
+    result.vector <- rep(initial.value, times = 13)
+    names(result.vector) <- allen.basic.relation.set()
+    result.vector
 }
 
 #' Convert to a result vector
@@ -214,15 +197,9 @@ allen.create.result.vector <- function(initial.value = 0)
 #' @author Thomas S. Dye
 #'
 convert.to.result.vector <- function(obj) {
-    if(is.result.vector(obj))
-        ret <- obj
-    else
-        if(is.set.vector(obj))
-            ret <- allen.set.to.vector(obj)
-    else
-        if(is.set.string(obj))
-            ret <- allen.string.to.vector(obj)
-    else
-        stop("Object cannot be converted to a result set.")
+    if (is.result.vector(obj))
+        ret <- obj else if (is.set.vector(obj))
+        ret <- allen.set.to.vector(obj) else if (is.set.string(obj))
+        ret <- allen.string.to.vector(obj) else stop("Object cannot be converted to a result set.")
     ret
 }

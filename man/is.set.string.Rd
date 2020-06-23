@@ -13,7 +13,7 @@ is.set.string(obj)
 Boolean, TRUE if obj is a set string, FALSE otherwise.
 }
 \description{
-Checks for mode "character", length of 1, and nchar <= 13
+Checks for mode 'character', length of 1, and nchar <= 13
 }
 \author{
 Thomas S. Dye

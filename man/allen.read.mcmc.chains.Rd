@@ -28,14 +28,14 @@ allen.read.mcmc.chains(
 \item{names}{a vector of two strings naming the intervals specified by
 the positions parameters(s)}
 
-\item{app}{one of "bcal", "oxcal", or "chronomodel"}
+\item{app}{one of 'bcal', 'oxcal', or 'chronomodel'}
 
 \item{decimal}{optional decimal character for Chronomodel output}
 
 \item{separator}{optional separator character for Chronomodel output}
 
-\item{quiet}{One of "no" to allow messages and warnings,
-"partial" (default) to suppress messages and allow warnings, or "yes"
+\item{quiet}{One of 'no' to allow messages and warnings,
+'partial' (default) to suppress messages and allow warnings, or 'yes'
 to suppress messages and warnings.}
 }
 \value{

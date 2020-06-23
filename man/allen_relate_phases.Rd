@@ -20,8 +20,8 @@ for the beginning and end of the phase, respectively}
 \item{app}{one of 'bcal', 'oxcal', or 'chronomodel' to specify which
 Bayesian calibration application produced the MCMC output}
 
-\item{quiet}{One of "no" to allow messages and warnings,
-"partial" (default) to suppress messages and allow warnings, or "yes"
+\item{quiet}{One of 'no' to allow messages and warnings,
+'partial' (default) to suppress messages and allow warnings, or 'yes'
 to suppress messages and warnings.}
 }
 \value{

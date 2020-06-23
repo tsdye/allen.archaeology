@@ -10,22 +10,21 @@
 #'
 #' @author Thomas S. Dye
 #'
-  allen.check.names <- function(names) {
+allen.check.names <- function(names) {
     first.name <- strsplit(names[1], " ")
     first.name <- first.name[[1]][-length(first.name[[1]])]
     second.name <- strsplit(names[2], " ")
     second.name <- second.name[[1]][-length(second.name[[1]])]
-    if(!identical(first.name, second.name))
-      stop(sprintf("'%s' and '%s' do not match", first.name, second.name))
+    if (!identical(first.name, second.name))
+        stop(sprintf("'%s' and '%s' do not match", first.name, second.name))
     third.name <- strsplit(names[3], " ")
     third.name <- third.name[[1]][-length(third.name[[1]])]
     fourth.name <- strsplit(names[4], " ")
     fourth.name <- fourth.name[[1]][-length(fourth.name[[1]])]
-    if(!identical(third.name, fourth.name))
-       stop(sprintf("'%s' and '%s' do not match", third.name, fourth.name))
-    list(first = paste(first.name, collapse = " "),
-         second = paste(third.name, collapse = " "))
-  }
+    if (!identical(third.name, fourth.name))
+        stop(sprintf("'%s' and '%s' do not match", third.name, fourth.name))
+    list(first = paste(first.name, collapse = " "), second = paste(third.name, collapse = " "))
+}
 
 #' Check if an argument is odd.
 #'
@@ -35,13 +34,10 @@
 #' @param x An integer.
 #'
 #' @return Boolean
-  is.odd <- function(x)
-  {
-    if(!is.numeric(x))
-      stop("non-numeric argument")
-    else
-      x%%2 != 0
-  }
+is.odd <- function(x) {
+    if (!is.numeric(x))
+        stop("non-numeric argument") else x%%2 != 0
+}
 
 #' Allen relation of two definite intervals
 #'
@@ -57,58 +53,36 @@
 #' @return A one-letter code indicating the Allen relation
 #'
 #' @author Thomas S. Dye
-  allen.relation <- function(start.1, end.1, start.2, end.2)
-  {
+allen.relation <- function(start.1, end.1, start.2, end.2) {
     start.1 <- unlist(start.1)
     end.1 <- unlist(end.1)
     start.2 <- unlist(start.2)
     end.2 <- unlist(end.2)
-    if(!is.numeric(c(start.1, end.1, start.2, end.2)))
-      stop("arguments must be numeric")
-    if((end.1 < start.1) || (end.2 < start.2))
-      stop("beta is older than alpha")
-    else
-    {
-      result <- if(start.1 < start.2)
-                {
-                  if(end.1 < start.2) "p"
-                  else
-                    if(end.1 == start.2) "m"
-                  else
-                    if(end.1 < end.2) "o"
-                  else
-                    if(end.1 == end.2) "F"
-                  else
-                    "D"
-                }
-                else
-                  if(start.1 == start.2)
-                  {
-                    if(end.1 > end.2) "S"
-                    else
-                      if(end.1 == end.2) "e"
-                    else
-                      "s"
-                  }
-                else
-                  if(start.1 > start.2)
-                  {
-                    if(start.1 < end.2)
-                    {
-                      if(end.1 < end.2) "d"
-                      else
-                        if(end.1 == end.2) "f"
-                      else
-                        "O"
-                    }
-                    else
-                      if(start.1 == end.2) "M"
-                    else
-                      "P"
-                  }
-      result
+    if (!is.numeric(c(start.1, end.1, start.2, end.2)))
+        stop("arguments must be numeric")
+    if ((end.1 < start.1) || (end.2 < start.2))
+        stop("beta is older than alpha") else {
+        result <- if (start.1 < start.2) {
+            if (end.1 < start.2)
+                "p" else if (end.1 == start.2)
+                "m" else if (end.1 < end.2)
+                "o" else if (end.1 == end.2)
+                "F" else "D"
+        } else if (start.1 == start.2) {
+            if (end.1 > end.2)
+                "S" else if (end.1 == end.2)
+                "e" else "s"
+        } else if (start.1 > start.2) {
+            if (start.1 < end.2) {
+                if (end.1 < end.2)
+                  "d" else if (end.1 == end.2)
+                  "f" else "O"
+            } else if (start.1 == end.2)
+                "M" else "P"
+        }
+        result
     }
-  }
+}
 
 #' Relationship string from code
 #'
@@ -122,21 +96,9 @@
 #' @author Thomas S. Dye
 #'
 allen_code_to_string <- function(code) {
-    switch(code,
-           p = "precedes",
-           m = "meets",
-           o = "overlaps",
-           F = "finished by",
-           D = "contains",
-           s = "starts",
-           e = "equals",
-           S = "started by",
-           d = "during",
-           f = "finishes",
-           O = "overlapped by",
-           M = "met by",
-           P = "preceded by",
-           stop("unrecognized code"))
+    switch(code, p = "precedes", m = "meets", o = "overlaps", F = "finished by",
+        D = "contains", s = "starts", e = "equals", S = "started by", d = "during",
+        f = "finishes", O = "overlapped by", M = "met by", P = "preceded by", stop("unrecognized code"))
 }
 
 #' Convert a string containing Allen relation codes to a relation set
@@ -151,8 +113,7 @@ allen_code_to_string <- function(code) {
 #' @author Thomas S. Dye
 #'
 #' @export
-allen.string.to.set <- function(s)
-{
+allen.string.to.set <- function(s) {
     res <- strsplit(s, "")
     unlist(res)
 }
@@ -168,12 +129,11 @@ allen.string.to.set <- function(s)
 #' @author Thomas S. Dye
 #'
 #' @export
-allen.set.to.vector <- function(s)
-{
+allen.set.to.vector <- function(s) {
     res <- allen.create.result.vector()
-    for(x in 1:length(s)) {
+    for (x in 1:length(s)) {
         res <- allen.update.result(res, s[x])
-        }
+    }
     res
 }
 
@@ -189,8 +149,7 @@ allen.set.to.vector <- function(s)
 #' @author Thomas S. Dye
 #'
 #' @export
-allen.string.to.vector <- function(s)
-{
+allen.string.to.vector <- function(s) {
     s.set <- allen.string.to.set(s)
     res <- allen.set.to.vector(s.set)
     res
