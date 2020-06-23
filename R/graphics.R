@@ -18,16 +18,10 @@
 #' @importFrom graphics title
 #' @importFrom ggplot2 .pt aes facet_wrap ggsave ggtitle labs vars xlim
 #'
-allen_plot_multiple <- function(allen_set,
-                                file_name = NULL,
-                                pad = 0.2,
-                                font_size = 11,
-                                columns = 3,
-                                height = 7,
-                                width = 7) {
-    if((!is.data.frame(allen_set)) ||
-       dim(allen_set)[1] != 13)
-        stop("Unrecognized data for N\u00f6kel lattice.")
+allen_plot_multiple <- function(allen_set, file_name = NULL, pad = 0.2, font_size = 11,
+    columns = 3, height = 7, width = 7) {
+    if ((!is.data.frame(allen_set)) || dim(allen_set)[1] != 13)
+        stop("Unrecognized data for N\u00F6kel lattice.")
     g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
     min_x <- min(allen_set$x)
     max_x <- max(allen_set$x)
@@ -37,17 +31,12 @@ allen_plot_multiple <- function(allen_set,
     g <- g + ylim(min_y - pad, max_y + pad)
     g <- g + khroma::scale_colour_iridescent()
     g <- g + facet_wrap(vars(title), ncol = columns)
-    g <- g + ggraph::geom_node_label(mapping = aes(label = allen_set$node,
-                                                   colour = allen_set$result),
-                                     data = allen_set,
-                                     size = font_size / .pt)
-    g <- g + labs(colour = "Likeli-\nhood")
-    if(!is.null(file_name))
-        ggsave(filename = file_name,
-               plot = g,
-               device = grDevices::cairo_pdf,
-               height = height,
-               width = width)
+    g <- g + ggraph::geom_node_label(mapping = aes(label = allen_set$node, colour = allen_set$result),
+        data = allen_set, size = font_size/.pt)
+    g <- g + labs(colour = "Posterior\nprobability")
+    if (!is.null(file_name))
+        ggsave(filename = file_name, plot = g, device = grDevices::cairo_pdf, height = height,
+            width = width)
     g
 }
 
@@ -63,6 +52,7 @@ allen_plot_multiple <- function(allen_set,
 #' @param font_size font size for the labels in the plot
 #' @param height height in inches of the graphic file output
 #' @param width width in inches of the graphic file output
+#' @param title title for the plot, defaults to the title in allen_set.
 #'
 #' @return called for its side effects
 #'
@@ -72,16 +62,10 @@ allen_plot_multiple <- function(allen_set,
 #' @importFrom ggplot2 .pt aes facet_wrap ggsave ggtitle labs vars xlim ylim
 #' @importFrom ggplot2 theme
 #'
-allen_plot_single <- function(allen_set,
-                              file_name = NULL,
-                              pad = 0.2,
-                              font_size = 11,
-                              height = 7,
-                              width = 7,
-                              title = allen_set$title) {
-    if(!((is.data.frame(allen_set)) &&
-       dim(allen_set)[1] == 13))
-        stop("Unrecognized data for N\u00f6kel lattice.")
+allen_plot_single <- function(allen_set, file_name = NULL, pad = 0.2, font_size = 11,
+    height = 7, width = 7, title = allen_set$title) {
+    if (!((is.data.frame(allen_set)) && dim(allen_set)[1] == 13))
+        stop("Unrecognized data for N\u00F6kel lattice.")
     g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
     min_x <- min(allen_set$x)
     max_x <- max(allen_set$x)
@@ -91,21 +75,15 @@ allen_plot_single <- function(allen_set,
     g <- g + ylim(min_y - pad, max_y + pad)
     g <- g + ggtitle(title)
     g <- g + khroma::scale_colour_iridescent()
-    g <- g + ggraph::geom_node_label(mapping = aes(label = node,
-                                                   colour = result),
-                                     data = allen_set,
-                                     size = font_size / .pt)
-    if(is.illustration.vector(allen_set$result)) {
+    g <- g + ggraph::geom_node_label(mapping = aes(label = node, colour = result),
+        data = allen_set, size = font_size/.pt)
+    if (is.illustration.vector(allen_set$result)) {
         g <- g + theme(legend.position = "none")
-    }
-    else {
+    } else {
         g <- g + labs(colour = "Posterior\nprobability")
     }
-    if(!is.null(file_name))
-        ggsave(filename = file_name,
-               plot = g,
-               device = grDevices::cairo_pdf,
-               height = height,
-               width = width)
+    if (!is.null(file_name))
+        ggsave(filename = file_name, plot = g, device = grDevices::cairo_pdf, height = height,
+            width = width)
     g
 }
