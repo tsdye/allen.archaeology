@@ -20,9 +20,9 @@
 #'
 #' @return A dataframe suitable for plotting with graph
 #'
-#' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
+#' @seealso \code{\link{allen_composite_relation}}
 #'
-#' @export
+#' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
 #'
 allen_relate_phases <- function(mcmc,
                                 phases_1,
@@ -108,8 +108,6 @@ allen_relate_phases <- function(mcmc,
 #' \emph{Mapping Our Ancestors: Phylogenetic Approaches in Anthropology and
 #' Prehistory.} New Brunswick: AldineTransaction.
 #'
-#' @export
-#'
 
 illustrate_allen_relations <- function(relations = "basic") {
     result <-   switch(relations,
@@ -166,9 +164,15 @@ illustrate_allen_relations <- function(relations = "basic") {
 
 #' Calculate the composite relation of two phases
 #'
+#' Uses the Allen algebra to infer the relation of two phases from their
+#' relation to a third phase.
+#'
 #' @param mcmc path to a csv file with MCMC output
 #' @param phases a vector with six column indices representing the start
-#' and end chains of three phases
+#' and end chains of three phases.  The composite relation of the first
+#' and third phases will be inferred based on their relation to the
+#' second phase.
+#'
 #' @param title a plot title
 #' @param app one of 'bcal', 'oxcal', or 'chronomodel' to specify which
 #' Bayesian calibration application produced the MCMC output
@@ -178,9 +182,8 @@ illustrate_allen_relations <- function(relations = "basic") {
 #'
 #' @return A dataframe for input to allen_plot_single()
 #'
+#' @seealso \code{\link{allen_relate_phases}}
 #' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
-#'
-#' @export
 #'
 allen_composite_relation <- function(mcmc,
                                      phases,

@@ -1,55 +1,3 @@
-#' Plot a Nökel lattice
-#'
-#' Plot a single Nökel lattice to the display and optionally to a file.
-#'
-#' @param allen_set a dataframe, such as the one produced by
-#' illustrate_allen_relations()
-#' @param file_name path to the optional graphics file
-#' @param graph_title title of the graph
-#' @param pad pad the left and right margins to keep labels from disappearing
-#' @param font_size font size for the labels in the plot
-#' @param height height in inches of the plot saved to file
-#' @param width width in inches of the plot saved to file
-#'
-#' @return called for its side effects
-#'
-#' @author Thomas S. Dye
-#'
-#' @export
-#'
-#' @importFrom ggplot2 .pt aes facet_wrap ggsave ggtitle labs vars xlim
-#'
-allen_nokel_lattice <- function(allen_set,
-                                file_name = NULL,
-                                graph_title = "N\u00F6kel lattice",
-                                ## graph_title = "Nökel lattice",
-                                pad = 0.2,
-                                font_size = 11,
-                                height = 7,
-                                width = 7) {
-    if((!is.data.frame(allen_set)) ||
-       dim(allen_set)[1] != 13)
-        stop("Unrecognized data for N\u00f6kel lattice.")
-  g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
-  min_x <- min(allen_set$x)
-  max_x <- max(allen_set$x)
-  g <- g + xlim(min_x - pad, max_x + pad)
-  g <- g + khroma::scale_colour_iridescent()
-  g <- g + ggraph::geom_node_label(mapping = aes(label = node,
-                                                 colour = result),
-                                   data = allen_set,
-                                   size = font_size / .pt)
-  g <- g + ggtitle(graph_title)
-  g <- g + labs(colour = "Likeli-\nhood")
-  if(!is.null(file_name))
-      ggsave(filename = file_name,
-             plot = g,
-             device = grDevices::cairo_pdf,
-             height = height,
-             width = width)
-  g
-}
-
 #' Make a plot with panels of N\\u00F6kel lattices.
 #'
 #' Plot panels of N\\u00F6kel lattices to the display and optionally to a file.
@@ -66,8 +14,6 @@ allen_nokel_lattice <- function(allen_set,
 #' @return called for its side effects
 #'
 #' @author Thomas S. Dye
-#'
-#' @export
 #'
 #' @importFrom graphics title
 #' @importFrom ggplot2 .pt aes facet_wrap ggsave ggtitle labs vars xlim
@@ -122,8 +68,6 @@ allen_plot_multiple <- function(allen_set,
 #'
 #' @author Thomas S. Dye
 #'
-#' @export
-#'
 #' @importFrom graphics title
 #' @importFrom ggplot2 .pt aes facet_wrap ggsave ggtitle labs vars xlim ylim
 #' @importFrom ggplot2 theme
@@ -133,7 +77,8 @@ allen_plot_single <- function(allen_set,
                               pad = 0.2,
                               font_size = 11,
                               height = 7,
-                              width = 7) {
+                              width = 7,
+                              title = allen_set$title) {
     if(!((is.data.frame(allen_set)) &&
        dim(allen_set)[1] == 13))
         stop("Unrecognized data for N\u00f6kel lattice.")
@@ -144,7 +89,7 @@ allen_plot_single <- function(allen_set,
     min_y <- min(allen_set$y)
     max_y <- max(allen_set$y)
     g <- g + ylim(min_y - pad, max_y + pad)
-    g <- g + ggtitle(allen_set$title)
+    g <- g + ggtitle(title)
     g <- g + khroma::scale_colour_iridescent()
     g <- g + ggraph::geom_node_label(mapping = aes(label = node,
                                                    colour = result),
@@ -154,7 +99,7 @@ allen_plot_single <- function(allen_set,
         g <- g + theme(legend.position = "none")
     }
     else {
-        g <- g + labs(colour = "Likeli-\nhood")
+        g <- g + labs(colour = "Posterior\nprobability")
     }
     if(!is.null(file_name))
         ggsave(filename = file_name,

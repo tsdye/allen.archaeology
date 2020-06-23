@@ -16,7 +16,9 @@ allen_composite_relation(
 \item{mcmc}{path to a csv file with MCMC output}
 
 \item{phases}{a vector with six column indices representing the start
-and end chains of three phases}
+and end chains of three phases.  The composite relation of the first
+and third phases will be inferred based on their relation to the
+second phase.}
 
 \item{title}{a plot title}
 
@@ -31,5 +33,9 @@ to suppress messages and warnings.}
 A dataframe for input to allen_plot_single()
 }
 \description{
-Calculate the composite relation of two phases
+Uses the Allen algebra to infer the relation of two phases from their
+relation to a third phase.
+}
+\seealso{
+\code{\link{allen_relate_phases}}
 }

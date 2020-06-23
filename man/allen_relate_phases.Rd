@@ -31,6 +31,9 @@ A dataframe suitable for plotting with graph
 Reads MCMC output to create a dataframe suitable
 for plotting the Allen relations between two or more phases.
 }
+\seealso{
+\code{\link{allen_composite_relation}}
+}
 \author{
 Thomas S. Dye
 }

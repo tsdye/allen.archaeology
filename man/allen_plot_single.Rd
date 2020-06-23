@@ -10,7 +10,8 @@ allen_plot_single(
   pad = 0.2,
   font_size = 11,
   height = 7,
-  width = 7
+  width = 7,
+  title = allen_set$title
 )
 }
 \arguments{
