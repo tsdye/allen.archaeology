@@ -2,7 +2,7 @@
 % Please edit documentation in R/graphics.R
 \name{allen_plot_single}
 \alias{allen_plot_single}
-\title{Make a single plot of a N\\u00F6kel lattice.}
+\title{Make a single plot of a Nökel lattice.}
 \usage{
 allen_plot_single(
   allen_set,
@@ -35,7 +35,7 @@ labels from disappearing off the edge of the graphic}
 called for its side effects
 }
 \description{
-Plots a N\\u00F6kel lattice to the display and optionally to a file.
+Plots a Nökel lattice to the display and optionally to a file.
 }
 \author{
 Thomas S. Dye

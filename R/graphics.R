@@ -1,6 +1,6 @@
-#' Make a plot with panels of N\\u00F6kel lattices.
+#' Make a plot with panels of Nökel lattices.
 #'
-#' Plot panels of N\\u00F6kel lattices to the display and optionally to a file.
+#' Plot panels of Nökel lattices to the display and optionally to a file.
 #'
 #' @param allen_set a dataframe with plot information, such as the one
 #' produced by xxx
@@ -40,9 +40,9 @@ allen_plot_multiple <- function(allen_set, file_name = NULL, pad = 0.2, font_siz
     g
 }
 
-#' Make a single plot of a N\\u00F6kel lattice.
+#' Make a single plot of a Nökel lattice.
 #'
-#' Plots a N\\u00F6kel lattice to the display and optionally to a file.
+#' Plots a Nökel lattice to the display and optionally to a file.
 #'
 #' @param allen_set a dataframe with plot information, such as the one
 #' produced by illustrate_allen_relations()

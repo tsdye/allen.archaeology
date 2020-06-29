@@ -2,7 +2,7 @@
 % Please edit documentation in R/graphics.R
 \name{allen_plot_multiple}
 \alias{allen_plot_multiple}
-\title{Make a plot with panels of N\\u00F6kel lattices.}
+\title{Make a plot with panels of Nökel lattices.}
 \usage{
 allen_plot_multiple(
   allen_set,
@@ -34,7 +34,7 @@ produced by xxx}
 called for its side effects
 }
 \description{
-Plot panels of N\\u00F6kel lattices to the display and optionally to a file.
+Plot panels of Nökel lattices to the display and optionally to a file.
 }
 \author{
 Thomas S. Dye
