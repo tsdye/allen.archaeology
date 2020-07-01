@@ -39,7 +39,7 @@
 #' }
 #'
 #'
-#' @param ... Named arguments to be passed on to \code{allen_plot_single()}.
+#' @param ... Named arguments to be passed on to \code{allen_plot()}.
 #'
 #' @references
 #'
@@ -58,16 +58,16 @@
 #' @examples
 #'
 #' # Plot to the R graphics device
-#' illustrate()
+#' # illustrate()
 #'
 #' # Save layout_tbl_graph object to a variable
 #' # then plot to the R graphics device
 #'
-#' foo <- illustrate()
-#' foo
+#' # foo <- illustrate()
+#' # foo
 #'
 #' @export
 
 illustrate <- function(relations = "basic", ...) {
-    allen_plot_single(illustrate_allen_relations(relations), ...)
+    allen_plot(illustrate_allen_relations(relations), ...)
 }

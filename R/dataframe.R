@@ -24,6 +24,8 @@
 #'
 #' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
 #'
+#' @export
+#'
 allen_relate_phases <- function(mcmc, phases_1, phases_2, app = "bcal", quiet = "partial") {
     relate_phases <- function(first, second, all.chains) {
         chains <- all.chains[, c(first[2:3], second[2:3])]
@@ -36,7 +38,7 @@ allen_relate_phases <- function(mcmc, phases_1, phases_2, app = "bcal", quiet = 
         allen_set <- paste(allen_set, collapse = "")
         x <- allen_lattice_x()
         y <- allen_lattice_y()
-        title <- rep(sprintf("Allen relation: %s(%s)%s", first[1], allen_set, second[1]),
+        title <- rep(sprintf("%s(%s)%s", first[1], allen_set, second[1]),
             length(result.vector))
         this.relation <- cbind.data.frame(x, y, result, node, title)
         this.relation
@@ -88,7 +90,7 @@ allen_relate_phases <- function(mcmc, phases_1, phases_2, app = "bcal", quiet = 
 #' \item{anagenesis}{show the composite relations of transmission during
 #'     anagenesis.}}
 #'
-#' @return A dataframe for input to allen_plot_single()
+#' @return A dataframe for input to allen_plot()
 #'
 #' @references
 #'
@@ -147,7 +149,7 @@ illustrate_allen_relations <- function(relations = "basic") {
 #' 'partial' (default) to suppress messages and allow warnings, or 'yes'
 #' to suppress messages and warnings.
 #'
-#' @return A dataframe for input to allen_plot_single()
+#' @return A dataframe for input to allen_plot()
 #'
 #' @seealso \code{\link{allen_relate_phases}}
 #' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
@@ -169,7 +171,7 @@ allen_composite_relation <- function(mcmc, phases, title = c("first", "second"),
     res <- allen.composition(set.vector.1, set.vector.2)
     title_res <- paste(res, collapse = "")
     title_res <- allen.order.string(title_res)
-    graph_title <- sprintf("Allen relation: %s(%s)%s", title[1], title_res, title[2])
+    graph_title <- sprintf("%s(%s)%s", title[1], title_res, title[2])
     result <- allen.set.to.vector(res)
     node <- allen_basic_relation_strings()
     x <- allen_lattice_x()

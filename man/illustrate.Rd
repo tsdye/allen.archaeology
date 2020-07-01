@@ -35,7 +35,7 @@ illustrate(relations = "basic", ...)
     one successor.}
 }}
 
-\item{...}{Named arguments to be passed on to \code{allen_plot_single()}.}
+\item{...}{Named arguments to be passed on to \code{allen_plot()}.}
 }
 \value{
 A layout_tbl_graph object.
@@ -54,13 +54,13 @@ little guidance for the chronological model builder.
 \examples{
 
 # Plot to the R graphics device
-illustrate()
+# illustrate()
 
 # Save layout_tbl_graph object to a variable
 # then plot to the R graphics device
 
-foo <- illustrate()
-foo
+# foo <- illustrate()
+# foo
 
 }
 \references{

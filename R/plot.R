@@ -16,7 +16,7 @@
 #' @param quiet One of 'no' to allow messages and warnings,
 #' 'partial' (default) to suppress messages and allow warnings, or 'yes'
 #' to suppress messages and warnings.
-#' @param ... Named arguments to be passed on to \code{allen_plot_single()}.
+#' @param ... Named arguments to be passed on to \code{allen_plot()}.
 #'
 #' @return A layout_tbl_graph object.
 #'
@@ -34,9 +34,9 @@
 #' @export
 
 plot_lattice <- function(mcmc, phases_1, phases_2, app = "bcal", quiet = "partial", ...) {
-    allen_plot_single(allen_relate_phases(mcmc = mcmc,
-                                          phases_1 = phases_1,
-                                          phases_2 = phases_2,
-                                          app = app),
-                      ...)
+    allen_plot(allen_relate_phases(mcmc = mcmc,
+                                   phases_1 = phases_1,
+                                   phases_2 = phases_2,
+                                   app = app),
+               ...)
 }

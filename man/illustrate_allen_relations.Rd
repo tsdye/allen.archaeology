@@ -31,7 +31,7 @@ illustrate_allen_relations(relations = "basic")
     anagenesis.}}}
 }
 \value{
-A dataframe for input to allen_plot_single()
+A dataframe for input to allen_plot()
 }
 \description{
 Create a dataframe that can be used as input for an illustrative plot.

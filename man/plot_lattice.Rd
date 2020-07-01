@@ -24,7 +24,7 @@ Bayesian calibration application produced the MCMC output}
 'partial' (default) to suppress messages and allow warnings, or 'yes'
 to suppress messages and warnings.}
 
-\item{...}{Named arguments to be passed on to \code{allen_plot_single()}.}
+\item{...}{Named arguments to be passed on to \code{allen_plot()}.}
 }
 \value{
 A layout_tbl_graph object.

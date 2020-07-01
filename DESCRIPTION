@@ -1,6 +1,6 @@
 Package: allen.archaeology
 Title: Allen\'s Interval Algebra for Archaeologists
-Version: 0.0.2.0
+Version: 0.0.3.0
 Authors@R:
     person(given = "Thomas",
            family = "Dye",
@@ -19,6 +19,7 @@ Imports:
     ArchaeoPhases,
     ggraph,
     ggplot2,
-    khroma
+    khroma,
+    grDevices
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
