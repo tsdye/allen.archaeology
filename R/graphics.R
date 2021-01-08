@@ -25,7 +25,7 @@
 #' @importFrom grDevices bmp cairo_pdf cairo_ps jpeg png svg tiff
 #'
 allen_plot <- function(allen_set, file_name = NULL, pad = 0.2, font_size = 11,
-    height = 7, width = 7, columns = 1, plot_title = allen_set$title, dpi = 600) {
+                       height = 7, width = 7, columns = 1, plot_title = allen_set$title, dpi = 600) {
     if (!(is.data.frame(allen_set)))
         stop("Unrecognized data for N\u00F6kel lattice.")
     g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
@@ -38,9 +38,9 @@ allen_plot <- function(allen_set, file_name = NULL, pad = 0.2, font_size = 11,
         g <- g + ggtitle(plot_title)
     else
         g <- g + facet_wrap(vars(title), ncol = columns)
-    g <- g + khroma::scale_colour_iridescent()
+    g <- g + scico::scale_colour_scico(palette = 'grayC')
     g <- g + ggraph::geom_node_label(mapping = aes(label = node, colour = result ),
-                                     fill = "#DDDDDD",
+                                     ## fill = "#DDDDDD",
                                      data = allen_set,
                                      size = font_size/.pt)
     if (is.illustration.vector(allen_set$result)) {
