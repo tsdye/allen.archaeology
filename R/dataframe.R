@@ -26,7 +26,12 @@
 #'
 #' @export
 #'
-allen_relate_phases <- function(mcmc, phases_1, phases_2, app = "bcal", quiet = "partial") {
+allen_relate_phases <- function(mcmc,
+                                phases_1,
+                                phases_2,
+                                app = "bcal",
+                                quiet = "partial") {
+
     relate_phases <- function(first, second, all.chains) {
         chains <- all.chains[, c(first[2:3], second[2:3])]
         zero.vector <- allen.create.result.vector()
@@ -43,20 +48,27 @@ allen_relate_phases <- function(mcmc, phases_1, phases_2, app = "bcal", quiet = 
         this.relation <- cbind.data.frame(x, y, result, node, title)
         this.relation
     }
-    chains.df <- switch(app, chronomodel = ArchaeoPhases::read_chronomodel(mcmc,
-        quiet = quiet), oxcal = ArchaeoPhases::read_oxcal(mcmc, quiet = quiet), bcal = ArchaeoPhases::read_bcal(mcmc,
-        quiet = quiet), stop(sprintf("Unknown application, '%s'", app)))
-    relation_list <- mapply(FUN = relate_phases, phases_1, phases_2, MoreArgs = list(all.chains = chains.df),
-        SIMPLIFY = FALSE)
+
+    chains.df <- switch(
+        app,
+        chronomodel = ArchaeoPhases::read_chronomodel(mcmc, quiet = quiet),
+        oxcal = ArchaeoPhases::read_oxcal(mcmc, quiet = quiet),
+        bcal = ArchaeoPhases::read_bcal(mcmc, quiet = quiet),
+        stop(sprintf("Unknown application, '%s'", app)))
+
+    relation_list <- mapply(FUN = relate_phases,
+                            phases_1,
+                            phases_2,
+                            MoreArgs = list(all.chains = chains.df),
+                            SIMPLIFY = FALSE)
     relations <- NULL
     for (x in relation_list) {
         relations <- rbind.data.frame(relations, x)
     }
-    relations
+    new_allen_empirical(relations)
 }
 
-#' Data for an illustrative graphic:
-#'
+#' Data for an illustrative graphic
 #'
 #' Create a dataframe that can be used as input for an illustrative plot.
 #' Useful for describing the Allen operators: illustrate the full
@@ -104,42 +116,60 @@ allen_relate_phases <- function(mcmc, phases_1, phases_2, app = "bcal", quiet = 
 #'
 
 illustrate_allen_relations <- function(relations = "basic") {
-    result <- switch(relations,
-                     basic = allen.create.result.vector(initial.value = 1),
-                     concurrent = allen.create.concurrent.vector(),
-                     six = allen.create.distinct.endpoint.vector(),
-                     inherit = allen.string.to.vector("oFD"),
-                     contribute = allen.string.to.vector("moFD"),
-                     stratigraphic = allen.string.to.vector("mM"),
-                     anagenetic = allen.string.to.vector("mM"),
-                     cladogenetic = allen.string.to.vector("OfdoFD"),
-                     contributors = allen.set.to.vector(allen.composition(allen.string.to.set("moFD"),
-                                                                          allen.string.to.set("MOfd"))),
-                     innovations = allen.set.to.vector(allen.composition(allen.string.to.set("Ofd"),
-                                                                         allen.string.to.set("oFD"))),
-                     sequence = allen.set.to.vector(allen.composition(allen.string.to.set("m"),
-                                                                      allen.string.to.set("m"))),
-                     anagenesis = allen.set.to.vector(allen.composition(allen.string.to.set("m"),
-                                                                        allen.string.to.set("m"))),
-                     incorporation.2 = allen.set.to.vector(allen.composition(allen.string.to.set("m"),
-                                                                             allen.string.to.set("Ofd"))),
-                     incorporation.1 = allen.set.to.vector(allen.composition(allen.string.to.set("m"),
-                                                                             allen.string.to.set("M"))),
-                     stop(sprintf("Unknown relation, '%s'", relations)))
-    title_string <- switch(relations, basic = "Basic Allen relations", concurrent = "Basic concurrent relations",
-        six = "Basic Allen relations with distinct endpoints", inherit = "Basic inheritance relations",
-        contribute = "Basic contribution relations", stratigraphic = "Basic stratigraphic relations",
-        anagenetic = "Basic anagenetic relations", cladogenetic = "Basic cladogenetic relations",
-        contributors = "Composite contributor relation", innovations = "Composite innovation relation",
-        sequence = "Composite stratigraphic relation", anagenesis = "Composite anagenetic relation",
-        incorporation.2 = "Composite contributor relation with two successors", incorporation.1 = "Composite contributor relation with one successor",
-        stop(sprintf("unknown relation, '%s'", relations)))
+    result <- switch(
+        relations,
+        basic = allen.create.result.vector(initial.value = 1),
+        concurrent = allen.create.concurrent.vector(),
+        six = allen.create.distinct.endpoint.vector(),
+        inherit = allen.string.to.vector("oFD"),
+        contribute = allen.string.to.vector("moFD"),
+        stratigraphic = allen.string.to.vector("mM"),
+        anagenetic = allen.string.to.vector("mM"),
+        cladogenetic = allen.string.to.vector("OfdoFD"),
+        contributors = allen.set.to.vector(
+            allen.composition(allen.string.to.set("moFD"),
+                              allen.string.to.set("MOfd"))),
+        innovations = allen.set.to.vector(
+            allen.composition(allen.string.to.set("Ofd"),
+                              allen.string.to.set("oFD"))),
+        sequence = allen.set.to.vector(
+            allen.composition(allen.string.to.set("m"),
+                              allen.string.to.set("m"))),
+        anagenesis = allen.set.to.vector(
+            allen.composition(allen.string.to.set("m"),
+                              allen.string.to.set("m"))),
+        incorporation.2 = allen.set.to.vector(
+            allen.composition(allen.string.to.set("m"),
+                              allen.string.to.set("Ofd"))),
+        incorporation.1 = allen.set.to.vector(
+            allen.composition(allen.string.to.set("m"),
+                              allen.string.to.set("M"))),
+        stop(sprintf("Unknown relation, '%s'", relations)))
+
+    title_str <- switch(
+        relations,
+        basic = "Basic Allen relations",
+        concurrent = "Basic concurrent relations",
+        six = "Basic Allen relations with distinct endpoints",
+        inherit = "Basic inheritance relations",
+        contribute = "Basic contribution relations",
+        stratigraphic = "Basic stratigraphic relations",
+        anagenetic = "Basic anagenetic relations",
+        cladogenetic = "Basic cladogenetic relations",
+        contributors = "Composite contributor relation",
+        innovations = "Composite innovation relation",
+        sequence = "Composite stratigraphic relation",
+        anagenesis = "Composite anagenetic relation",
+        incorporation.2 = "Composite contributor relation with two successors",
+        incorporation.1 = "Composite contributor relation with one successor",
+        stop(sprintf("Unknown relation, '%s'", relations)))
+
     node <- allen_basic_relation_strings()
     x <- allen_lattice_x()
     y <- allen_lattice_y()
-    title <- rep(title_string, length(node))
+    title <- rep(title_str, length(node))
     df <- cbind.data.frame(x, y, result, node, title)
-    df
+    new_allen_illustrative(df)
 }
 
 #' Calculate the composite relation of two phases
@@ -152,7 +182,6 @@ illustrate_allen_relations <- function(relations = "basic") {
 #' and end chains of three phases.  The composite relation of the first
 #' and third phases will be inferred based on their relation to the
 #' second phase.
-#'
 #' @param title a plot title
 #' @param app one of 'bcal', 'oxcal', or 'chronomodel' to specify which
 #' Bayesian calibration application produced the MCMC output
@@ -165,13 +194,18 @@ illustrate_allen_relations <- function(relations = "basic") {
 #' @seealso \code{\link{allen_relate_phases}}
 #' @importFrom ArchaeoPhases read_bcal read_oxcal read_chronomodel
 #'
-allen_composite_relation <- function(mcmc, phases, title = c("first", "second"),
-    app = "bcal", quiet = "partial") {
+allen_composite_relation <- function(mcmc,
+                                     phases,
+                                     title = c("first", "second"),
+                                     app = "bcal",
+                                     quiet = "partial") {
     if (length(phases) != 6)
         stop("Chains for three phases are required.")
-    chains <- switch(app, chronomodel = read_chronomodel(mcmc, quiet = quiet), oxcal = read_oxcal(mcmc,
-        quiet = quiet), bcal = read_bcal(mcmc, quiet = quiet), stop(sprintf("Unknown application, '%s'",
-        app)))
+    chains <- switch(app,
+                     chronomodel = read_chronomodel(mcmc, quiet = quiet),
+                     oxcal = read_oxcal(mcmc, quiet = quiet),
+                     bcal = read_bcal(mcmc, quiet = quiet),
+                     stop(sprintf("Unknown application, '%s'", app)))
     chains <- chains[, phases]
     names <- colnames(chains)
     zero.vector <- allen.create.result.vector()
@@ -189,5 +223,40 @@ allen_composite_relation <- function(mcmc, phases, title = c("first", "second"),
     y <- allen_lattice_y()
     title <- rep(graph_title, length(node))
     df <- cbind.data.frame(x, y, result, node, title)
-    df
+    new_allen_empirical(df)
+}
+
+
+#' Constructor for empirical Allen set object
+#'
+#' Object to be returned by functions that create empirical Allen sets.
+#'
+#' @param x A data frame with the Allen set.
+#'
+#' @return An \code{allen_set_empirical} object that inherits from \code{tbl_df}.
+#'
+#' @author Thomas S. Dye, \email{tsd@@tsdye.online}
+#'
+new_allen_empirical <- function(x = data.frame()) {
+
+    stopifnot(is.data.frame(x))
+    structure(x,
+              class = c("allen_set_empirical", "data.frame"))
+}
+
+#' Constructor for illustrative Allen set object
+#'
+#' Object to be returned by functions that create illustrative Allen sets.
+#'
+#' @param x A data frame with the Allen set.
+#'
+#' @return An \code{allen_set_illustrative} object that inherits from \code{tbl_df}.
+#'
+#' @author Thomas S. Dye, \email{tsd@@tsdye.online}
+#'
+new_allen_illustrative <- function(x = data.frame()) {
+
+    stopifnot(is.data.frame(x))
+    structure(x,
+              class = c("allen_set_illustrative", "data.frame"))
 }

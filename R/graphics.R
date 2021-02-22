@@ -26,10 +26,13 @@
 #'
 allen_plot <- function(allen_set, file_name = NULL, pad = 0.2, font_size = 11,
                        height = 7, width = 7, columns = 1, plot_title = allen_set$title, dpi = 600) {
-    if (!(is.data.frame(allen_set)))
+    if (!(is.element("allen_set_illustrative", class(allen_set))
+        || is.element("allen_set_empirical", class(allen_set))))
         stop("Unrecognized data for N\u00F6kel lattice.")
     g <- ggraph::ggraph(graph = allen_set, layout = "nicely")
-    g <- g + ggraph::theme_graph()
+    g <- g + ggraph::th_no_axes()
+    g <- g + ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+                            panel.grid.minor = ggplot2::element_blank())
     g <- g + xlim(min(allen_set$x) - pad,
                   max(allen_set$x) + pad)
     g <- g + ylim(min(allen_set$y) - pad,
@@ -38,15 +41,15 @@ allen_plot <- function(allen_set, file_name = NULL, pad = 0.2, font_size = 11,
         g <- g + ggtitle(plot_title)
     else
         g <- g + facet_wrap(vars(title), ncol = columns)
-    g <- g + scico::scale_colour_scico(palette = 'grayC')
-    g <- g + ggraph::geom_node_label(mapping = aes(label = node, colour = result ),
-                                     ## fill = "#DDDDDD",
-                                     data = allen_set,
-                                     size = font_size/.pt)
-    if (is.illustration.vector(allen_set$result)) {
+    ## g <- g + scico::scale_colour_scico(palette = 'grayC')
+    g <- g + ggraph::geom_node_text(mapping = aes(label = node,
+                                                  alpha = result),
+                                    data = allen_set,
+                                    size = font_size/.pt)
+    if (is.element("allen_set_illustrative", class(allen_set))) {
         g <- g + theme(legend.position = "none")
     } else {
-        g <- g + labs(colour = "Posterior\nprobability")
+        g <- g + labs(alpha = "Posterior\nprobability")
     }
     if (!is.null(file_name)) {
         ext <- tools::file_ext(file_name)
